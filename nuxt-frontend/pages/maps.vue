@@ -1,7 +1,9 @@
 <template>
   <div>
     <div class="mapouter">
-      <div class="gmap_canvas">
+      <!-- 
+        
+        <div class="gmap_canvas">
 
         <iframe
           id="gmap_canvas"
@@ -13,15 +15,39 @@
           marginheight="0"
           marginwidth="0"
         />
-      </div>
+      </div> 
+      
+      -->
+
+      <MglMap :accessToken="accessToken" :mapStyle="mapStyle"/>
+
     </div>
   </div>
 </template>
 
 <script>
+import Mapbox from "mapbox-gl";
+import { MglMap, MglMarker } from "vue-mapbox";
+
   export default {
-    layout: 'dashboard'
+    layout: 'dashboard',
+    components: {
+      MglMap,
+      MglMarker      
+    },
+    data(){
+        return {
+          accessToken: 'pk.eyJ1IjoibnVubzc3NzYiLCJhIjoiY2s4cGo3eHJ4MTRnMjNkcXpqaHd5ZjB5cSJ9.pqySVQnXqXakFACfoQkdqQ', // your access token. Needed if you using Mapbox maps
+          mapStyle: 'mapbox://styles/mapbox/streets-v11' // your map style
+        };
+    },
+    created(){
+      this.mapbox = Mapbox;
+
+    }
   }
+
+
 </script>
 
 <style>
