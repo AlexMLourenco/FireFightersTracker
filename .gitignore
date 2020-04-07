@@ -1,0 +1,11 @@
+#nuxt dependencies
+node_modules/
+
+#npm cache directory
+.npm
+
+#nuxt.js build output
+.nuxt
+
+#next.js build output
+.next

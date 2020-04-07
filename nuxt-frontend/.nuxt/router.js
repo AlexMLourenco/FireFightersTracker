@@ -8,8 +8,6 @@ const _7485e744 = () => interopDefault(import('../pages/icons.vue' /* webpackChu
 const _3b577cdd = () => interopDefault(import('../pages/maps.vue' /* webpackChunkName: "pages/maps" */))
 const _43dde012 = () => interopDefault(import('../pages/notifications.vue' /* webpackChunkName: "pages/notifications" */))
 const _284ce003 = () => interopDefault(import('../pages/table-list.vue' /* webpackChunkName: "pages/table-list" */))
-const _771f44f5 = () => interopDefault(import('../pages/typography.vue' /* webpackChunkName: "pages/typography" */))
-const _10fabded = () => interopDefault(import('../pages/user-profile.vue' /* webpackChunkName: "pages/user-profile" */))
 const _d38dbe08 = () => interopDefault(import('../pages/index.vue' /* webpackChunkName: "pages/index" */))
 
 // TODO: remove in Nuxt 3
@@ -48,14 +46,6 @@ export const routerOptions = {
     path: "/table-list",
     component: _284ce003,
     name: "table-list"
-  }, {
-    path: "/typography",
-    component: _771f44f5,
-    name: "typography"
-  }, {
-    path: "/user-profile",
-    component: _10fabded,
-    name: "user-profile"
   }, {
     path: "/",
     component: _d38dbe08,
