@@ -8,8 +8,7 @@ pipeline {
     stages {
         stage('Build') { 
             steps {
-		sh 'cd java-maven-app'
-                sh 'mvn -B -DskipTests clean package' 
+                sh 'mvn -f java-maven-app/pom.xml -B -DskipTests clean package' 
             }
         }
     }
