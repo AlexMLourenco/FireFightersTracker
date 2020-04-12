@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Build') { 
             steps {
-                sh 'mvn -f java-maven-app/pom.xml -B -DskipTests clean package' 
+                sh 'mvn -f service-layer/pom.xml -B -DskipTests clean package' 
             }
         }
     }
