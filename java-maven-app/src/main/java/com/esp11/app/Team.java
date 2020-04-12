@@ -17,7 +17,7 @@ public class Team {
     
      private int time;
     
-    private String[][] states;
+    private String[][] fireFighters;
     
     public Team(){
     
@@ -26,19 +26,16 @@ public class Team {
         this.time = time;
     }
     
-    public void setString(){
-        this.states = states;
+    public void setFireFighters(){
+        this.fireFighters = fireFighters;
     }
     
     public int getTime(){
         return time;
     }
     
-    public String[][] getStates(){
-        return states;
-    }
-    public String[][] getString(){
-        return states;
+    public String[][] getFighters(){
+        return fireFighters;
     }
     
     @Override
@@ -46,7 +43,7 @@ public class Team {
     return 
             
             "Value{" +
-        "Time=" + time + "states: " + Arrays.toString(states[0]) +
+        "Time=" + time + "states: " + Arrays.toString(fireFighters[0]) +
         '}';
   }
 }
