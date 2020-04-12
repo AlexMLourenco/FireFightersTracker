@@ -49,7 +49,7 @@ public class ApiController {
     public String str = "";
     FireFighter[] array = new FireFighter[3];
     //@Scheduled(fixedRate = 10000)
-    @GetMapping("/flight")
+    @GetMapping("/fighters")
     public FireFighter[] reportCurrentTime(Model model) {
         /*
         Team f = restTemplate.getForObject(
@@ -87,7 +87,7 @@ public class ApiController {
         System.out.println("Received Messasge: " + message);
         
         String[][] ffs;
-        ffs = t.getString();
+        ffs = t.getFighters();
            
         for (int i = 0; i < ffs.length; i++) {            
             FireFighter ff = new FireFighter(t.getTime(),ffs[i]);
