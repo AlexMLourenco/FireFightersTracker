@@ -19,7 +19,17 @@
       
       -->
 
-      <MglMap :accessToken="accessToken" :mapStyle="mapStyle"/>
+      <MglMap :accessToken="accessToken" :mapStyle.sync="mapStyle" :center="coordinates">
+      <!-- <MglMarker :coordinates="coordinates" color="blue" /> -->
+
+
+        <!-- <div v-for="fire in fires" :key="fire.id">
+          <MglMarker :coordinates="fire.coordinates">
+            <v-icon slot="marker">mdi-fire</v-icon>
+          </MglMarker>
+        </div> -->
+
+      </MglMap>
 
     </div>
   </div>
@@ -38,7 +48,13 @@ import { MglMap, MglMarker } from "vue-mapbox";
     data(){
         return {
           accessToken: 'pk.eyJ1IjoibnVubzc3NzYiLCJhIjoiY2s4cGo3eHJ4MTRnMjNkcXpqaHd5ZjB5cSJ9.pqySVQnXqXakFACfoQkdqQ', // your access token. Needed if you using Mapbox maps
-          mapStyle: 'mapbox://styles/mapbox/streets-v11' // your map style
+          mapStyle: 'mapbox://styles/mapbox/streets-v11',
+          coordinates: [-111.549668, 39.014],
+          fires: {
+            id: '1', coordinates: [-111.549668, 39.014],
+            id: '2', coordinates: [-111.549677, 39.028],
+            id: '3', coordinates: [-111.549677, 39.036],
+          }
         };
     },
     created(){
