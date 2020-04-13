@@ -3,6 +3,7 @@ from kafka.errors import KafkaError
 import json 
 import csv
 import pprint
+import time
 
 from os import listdir
 from os.path import isfile, join
@@ -27,31 +28,33 @@ for f in onlyfiles:
                     'gps_alt_tag': row[4]
                 })
 
-pprint.pprint(firefighters['vr12']['gps'])
+# pprint.pprint(firefighters['a1']['gps'])
+# producer = KafkaProducer(bootstrap_servers=['localhost:9092'])
 
+# # Asynchronous by default
+# future = producer.send('', b'raw_bytes')
 
-producer = KafkaProducer(bootstrap_servers=['localhost:9092'])
+# # Block for 'synchronous' sends
+# try:
+#     record_metadata = future.get(timeout=10)
+# except KafkaError:
+#     # Decide what to do if produce request failed...
+#     log.exception()
+#     pass
 
-# Asynchronous by default
-future = producer.send('', b'raw_bytes')
-
-# Block for 'synchronous' sends
-try:
-    record_metadata = future.get(timeout=10)
-except KafkaError:
-    # Decide what to do if produce request failed...
-    log.exception()
-    pass
-
-# Successful result returns assigned partition and offset
-print (record_metadata.topic)
-print (record_metadata.partition)
-print (record_metadata.offset)
+# # Successful result returns assigned partition and offset
+# print (record_metadata.topic)
+# print (record_metadata.partition)
+# print (record_metadata.offset)
 
 # produce json messages
 producer = KafkaProducer(value_serializer=lambda m: json.dumps(m).encode('ascii'))
-for _i in range(100):
-    producer.send('Flights', {'key': 'value{}'.format(_i)})
+for firefighter in firefighters.keys():
+    for value in firefighters[firefighter]['gps']:
+        value['id'] = firefighter
+        value['type'] = 'gps'
+        producer.send('Flights', value)
+        time.sleep(5)
 
 # # produce asynchronously
 # for _ in range(100):
