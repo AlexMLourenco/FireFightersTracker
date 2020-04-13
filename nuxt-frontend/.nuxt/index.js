@@ -12,9 +12,10 @@ import { createStore } from './store.js'
 
 /* Plugins */
 
-import nuxt_plugin_axios_39484bcd from 'nuxt_plugin_axios_39484bcd' // Source: ./axios.js (mode: 'all')
+import nuxt_plugin_axios_5fdfd322 from 'nuxt_plugin_axios_5fdfd322' // Source: ./axios.js (mode: 'all')
 import nuxt_plugin_vuetify_165b1c58 from 'nuxt_plugin_vuetify_165b1c58' // Source: ../plugins/vuetify (mode: 'all')
 import nuxt_plugin_chartist_48b69162 from 'nuxt_plugin_chartist_48b69162' // Source: ../plugins/chartist (mode: 'client')
+import nuxt_plugin_mapbox_50fc9436 from 'nuxt_plugin_mapbox_50fc9436' // Source: ../plugins/mapbox (mode: 'client')
 
 // Component: <ClientOnly>
 Vue.component(ClientOnly.name, ClientOnly)
@@ -176,8 +177,8 @@ async function createApp (ssrContext) {
 
   // Plugin execution
 
-  if (typeof nuxt_plugin_axios_39484bcd === 'function') {
-    await nuxt_plugin_axios_39484bcd(app.context, inject)
+  if (typeof nuxt_plugin_axios_5fdfd322 === 'function') {
+    await nuxt_plugin_axios_5fdfd322(app.context, inject)
   }
 
   if (typeof nuxt_plugin_vuetify_165b1c58 === 'function') {
@@ -186,6 +187,10 @@ async function createApp (ssrContext) {
 
   if (process.client && typeof nuxt_plugin_chartist_48b69162 === 'function') {
     await nuxt_plugin_chartist_48b69162(app.context, inject)
+  }
+
+  if (process.client && typeof nuxt_plugin_mapbox_50fc9436 === 'function') {
+    await nuxt_plugin_mapbox_50fc9436(app.context, inject)
   }
 
   // If server-side, wait for async component to be resolved first

@@ -1,5 +1,6 @@
 <template>
   <div>
+    <client-only placeholder="Loading...">
     <div class="mapouter">
       <!-- 
         
@@ -19,12 +20,13 @@
       
       -->
 
-      <MglMap :accessToken="accessToken" :mapStyle.sync="mapStyle" :center="coordinates">
+      <MglMap :accessToken="accessToken" :mapStyle.sync="mapStyle" >
       <!-- <MglMarker :coordinates="coordinates" color="blue" /> -->
 
 
         <!-- <div v-for="fire in fires" :key="fire.id">
           <MglMarker :coordinates="fire.coordinates">
+            
             <v-icon slot="marker">mdi-fire</v-icon>
           </MglMarker>
         </div> -->
@@ -32,19 +34,13 @@
       </MglMap>
 
     </div>
+    </client-only>
   </div>
 </template>
 
 <script>
-import Mapbox from "mapbox-gl";
-import { MglMap, MglMarker } from "vue-mapbox";
-
   export default {
     layout: 'dashboard',
-    components: {
-      MglMap,
-      MglMarker      
-    },
     data(){
         return {
           accessToken: 'pk.eyJ1IjoibnVubzc3NzYiLCJhIjoiY2s4cGo3eHJ4MTRnMjNkcXpqaHd5ZjB5cSJ9.pqySVQnXqXakFACfoQkdqQ', // your access token. Needed if you using Mapbox maps
@@ -56,10 +52,6 @@ import { MglMap, MglMarker } from "vue-mapbox";
             id: '3', coordinates: [-111.549677, 39.036],
           }
         };
-    },
-    created(){
-      this.mapbox = Mapbox;
-
     }
   }
 

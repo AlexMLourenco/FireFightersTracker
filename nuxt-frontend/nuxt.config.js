@@ -1,6 +1,5 @@
 import VuetifyLoaderPlugin from 'vuetify-loader/lib/plugin'
 import pkg from './package'
-
 export default {
   mode: 'universal',
 
@@ -41,7 +40,8 @@ export default {
   */
   plugins: [
     '~/plugins/vuetify',
-    { src: '~/plugins/chartist', mode: 'client' }
+    { src: '~/plugins/chartist', mode: 'client' },
+    { src: '~/plugins/mapbox', mode: 'client'}
   ],
 
   /*
@@ -63,7 +63,9 @@ export default {
   */
   build: {
     transpile: ['vuetify/lib'],
-    plugins: [new VuetifyLoaderPlugin()],
+    plugins: [
+      new VuetifyLoaderPlugin()
+    ],
     loaders: {
 
     },
