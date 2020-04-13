@@ -9,7 +9,7 @@ node_modules/
 
 # next.js build output
 .next
-/java-maven-app/target/
 
 # remainings
 .DS_Store
+/service-layer/target/
