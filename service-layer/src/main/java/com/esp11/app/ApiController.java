@@ -8,9 +8,11 @@ package com.esp11.app;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Iterables;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.json.JSONObject;
 
 import org.slf4j.Logger;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,12 +29,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
+import com.google.gson.Gson;
 /**
  *
  * @author manuel
  */
-@Component
-@Controller
+//@Component
+@RestController
 public class ApiController {
     
     @Autowired
@@ -45,12 +48,12 @@ public class ApiController {
     
     private static final Logger log = LoggerFactory.getLogger(ApiController.class);
 
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+    //private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
     public String str = "";
     FireFighter[] array = new FireFighter[3];
-    //@Scheduled(fixedRate = 10000)
+    
     @GetMapping("/fighters")
-    public FireFighter[] reportCurrentTime(Model model) {
+    public String reportCurrentTime() throws JsonProcessingException {
         /*
         Team f = restTemplate.getForObject(
          
@@ -73,19 +76,25 @@ public class ApiController {
         kafkaTemplate.send("flights", "Adicionados "+ planes.length + " novos registos de voos. Sendo "+ c+ " com origem no Canada." );
         model.addAttribute("planes", planes);
         log.info("Flights in repository:");
-        
-        repository.findAll().forEach(x -> log.info(x.toString()));
         */
-        return array;
+        ObjectMapper mapper = new ObjectMapper();
+        Iterable<FireFighter> ff = repository.findAll();//.forEach(x -> log.info(x.toString()));
+        FireFighter[] fs = Iterables.toArray(ff, FireFighter.class);
+        String jsonString = mapper.writeValueAsString(fs[fs.length-1]);
+        
+        return jsonString;
     }
     
-    @KafkaListener(topics = "topicName", groupId = "team")
+    @KafkaListener(topics = "fighters", groupId = "team")
     public void listen(String message) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
-
-        Team t = mapper.readValue(message, Team.class);
-        System.out.println("Received Messasge: " + message);
-        
+        JSONObject jsonObject = new JSONObject(message);
+        Gson gson = new Gson();
+        FireFighter t = gson.fromJson(jsonObject.toString(), FireFighter.class);
+        System.out.println("Received Messasge: " + jsonObject.toString());
+        str = message;
+        repository.save(t);
+        /*
         String[][] ffs;
         ffs = t.getFighters();
            
@@ -94,5 +103,6 @@ public class ApiController {
             repository.save(ff);
             array[i] = ff;
         }
+*/
     }
 }

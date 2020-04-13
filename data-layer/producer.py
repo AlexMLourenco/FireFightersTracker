@@ -51,9 +51,9 @@ for f in onlyfiles:
 producer = KafkaProducer(value_serializer=lambda m: json.dumps(m).encode('ascii'))
 for firefighter in firefighters.keys():
     for value in firefighters[firefighter]['gps']:
-        value['id'] = firefighter
+        value['fighterID'] = firefighter
         value['type'] = 'gps'
-        producer.send('Flights', value)
+        producer.send('fighters', value)
         time.sleep(5)
 
 # # produce asynchronously
