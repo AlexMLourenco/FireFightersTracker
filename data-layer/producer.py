@@ -54,6 +54,7 @@ for firefighter in firefighters.keys():
         value['fighterID'] = firefighter
         value['type'] = 'gps'
         producer.send('fighters', value)
+        print('Produced information to topic firefighters')
         time.sleep(5)
 
 # # produce asynchronously

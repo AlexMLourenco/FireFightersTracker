@@ -20,8 +20,14 @@
       
       -->
 
-      <MglMap :accessToken="accessToken" :mapStyle.sync="mapStyle" >
-      <!-- <MglMarker :coordinates="coordinates" color="blue" /> -->
+      <MglMap 
+        :accessToken="accessToken" 
+        :mapStyle.sync="mapStyle"
+        @load="onMapLoad">
+        <MglMarker :coordinates.sync="coordinates">
+            <v-icon slot="marker" color="red">mdi-fire</v-icon>
+            <!-- <v-icon slot="marker" color="red">mdi-fire-truck</v-icon> -->
+        </MglMarker>
 
 
         <!-- <div v-for="fire in fires" :key="fire.id">
@@ -31,34 +37,91 @@
           </MglMarker>
         </div> -->
 
+        <div v-for="fire in fires" :key="fire.id">
+          <MglMarker :coordinates.sync="fire.coordinates">
+            <v-icon slot="marker" color="red">mdi-fire</v-icon>
+          </MglMarker>
+        </div>
+
       </MglMap>
 
-    </div>
+    </div>  
     </client-only>
   </div>
 </template>
 
 <script>
+  import axios from "axios"
   export default {
     layout: 'dashboard',
     data(){
         return {
           accessToken: 'pk.eyJ1IjoibnVubzc3NzYiLCJhIjoiY2s4cGo3eHJ4MTRnMjNkcXpqaHd5ZjB5cSJ9.pqySVQnXqXakFACfoQkdqQ', // your access token. Needed if you using Mapbox maps
           mapStyle: 'mapbox://styles/mapbox/streets-v11',
-          coordinates: [-111.549668, 39.014],
-          fires: {
-            id: '1', coordinates: [-111.549668, 39.014],
-            id: '2', coordinates: [-111.549677, 39.028],
-            id: '3', coordinates: [-111.549677, 39.036],
-          }
+          coordinates: [-8.630132,40.645427],
+          fires: [
+            {id: '1', coordinates: [-8.175346, 39.950672]},
+            {id: '2', coordinates: [-8.630132, 40.645472]},
+            {id: '3', coordinates: [-8.630132, 40.645489]},
+          ]
         };
-    }
-  }
+    },
+    head () {
+      return {
+        link: [
+          {rel: "stylesheet", href: "https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css"}
+        ],
+        meta: [
+          { hid: 'description', name: 'description', content: 'My custom description' }
+        ]
+      }
+    },
+    methods: {
+      async onMapLoad(event) {
+        // Here we cathing 'load' map event
+        this.map = event.map;
+        this.$store.map = event.map;
 
+        const firefighter = this.getFirefighters()
+
+        const asyncActions = event.component.actions
+        
+
+        const newParams = await asyncActions.flyTo({
+          // center: [40.645427,-8.630132],
+          center: [-8.630132,40.645427],
+          zoom: 7,
+          speed: 2
+        })
+        console.log(newParams)
+        /* => {
+                center: [30, 30],
+                zoom: 9,
+                bearing: 9,
+                pitch: 7
+              }
+        */
+        
+      },
+      async getFirefighters(){
+        console.log($this.store.actions.get_firefighters)
+        const res = await this.$store.state.dispatch("get_firefighters")
+        console.log(res)
+      },
+      getUrl(){
+        return "http://localhost:8080/fighters"
+      }
+    },
+    computed: {
+      firefighersState(){
+        
+      }
+    }
+}
 
 </script>
 
-<style>
+<style scoped>
   .mapouter {
     text-align:right;
     height:100%;
