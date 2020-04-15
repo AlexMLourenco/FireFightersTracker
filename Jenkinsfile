@@ -13,7 +13,7 @@ pipeline {
         }
 	stage('Test') {
             steps {
-                sh 'mvn -f service-layer/ test'
+                sh 'mvn -f service-layer/pom.xml test'
             }
             post {
                 always {
