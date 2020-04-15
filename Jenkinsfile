@@ -15,11 +15,7 @@ pipeline {
             steps {
                 sh 'mvn -f service-layer/ test'
             }
-            post {
-                always {
-                    junit 'service-layer/target/surefire-reports/*.xml'
-                }
-            }
+            
         }
         stage('Deliver') { 
             steps {
