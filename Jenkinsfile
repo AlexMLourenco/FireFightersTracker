@@ -19,7 +19,7 @@ pipeline {
         }
         stage('Deliver') { 
             steps {
-                sh 'java -jar target/java-maven-app-1.0-SNAPSHOT.jar' 
+                sh 'java -jar service-layer/target/java-maven-app-1.0-SNAPSHOT.jar' 
             }
         }
     }
