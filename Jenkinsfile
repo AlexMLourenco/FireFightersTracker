@@ -19,7 +19,8 @@ pipeline {
         }
         stage('Deploy') { 
             steps {
-                sh 'mvn -f service-layer/ deploy' 
+		sh 'cd service-layer/'
+                sh 'mvn deploy' 
             }
         }
     }
