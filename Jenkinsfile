@@ -19,7 +19,7 @@ pipeline {
         }
         stage('Deploy') { 
             steps {
-		sh 'cd service-layer/'
+		sh 'cd var/jenkins_home/workspace/es-2019-2020-P11_master'
                 sh 'mvn deploy' 
             }
         }
