@@ -8,18 +8,18 @@ pipeline {
     stages {
         stage('Build') { 
             steps {
-                sh 'mvn -B -DskipTests clean package' 
+                sh 'mvn -f service-layer/pom.xml -B -DskipTests clean package' 
             }
         }
 	stage('Test') {
             steps {
-                sh 'mvn  test'
+                sh 'mvn -f service-layer/ test'
             }
             
         }
         stage('Deploy') { 
             steps {
-                sh 'mvn deploy' 
+                sh 'mvn deploy -f service-layer/pom.xml ' 
             }
         }
     }
