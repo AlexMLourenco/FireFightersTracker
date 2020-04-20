@@ -30,6 +30,8 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
 import com.google.gson.Gson;
+import java.util.Arrays;
+import java.util.List;
 /**
  *
  * @author manuel
@@ -50,39 +52,55 @@ public class ApiController {
 
     //private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
     public String str = "";
-    FighterGPS[] array = new FighterGPS[3];
+    String[] array = {"a1","a2","vr12"};
     
-    @GetMapping("/fighters")
+    @GetMapping("/fightersGPS")
     public String reportCurrentTime() throws JsonProcessingException {
         /*
         Team f = restTemplate.getForObject(
-         
-                "https://opensky-network.org/api/states/all", Team.class);  
-        
+        "https://opensky-network.org/api/states/all", Team.class);
         String[][] flights;
         flights = f.getString();
-        int c = 0;   
-        for (int i = 0; i < 100; i++) {            
-            Plane p = new Plane(f.getTime(),flights[i][2],flights[i][0],flights[i][5], flights[i][6]);
-            repository.save(p);
-            if (p.getCountry().equals("Canada")){
-                c++;
-            }
-            
-            
-            planes[i] = p;
+        int c = 0;
+        for (int i = 0; i < 100; i++) {
+        Plane p = new Plane(f.getTime(),flights[i][2],flights[i][0],flights[i][5], flights[i][6]);
+        repository.save(p);
+        if (p.getCountry().equals("Canada")){
+        c++;
+        }
+        planes[i] = p;
         }
         log.info("count" + c);
         kafkaTemplate.send("flights", "Adicionados "+ planes.length + " novos registos de voos. Sendo "+ c+ " com origem no Canada." );
         model.addAttribute("planes", planes);
         log.info("Flights in repository:");
-        */
+         */
         ObjectMapper mapper = new ObjectMapper();
-        Iterable<FighterGPS> ff = repository.findAll();//.forEach(x -> log.info(x.toString()));
-        FighterGPS[] fs = Iterables.toArray(ff, FighterGPS.class);
-        String jsonString = mapper.writeValueAsString(fs[fs.length-1]);
+        String[] actual = new String[3];
+        for (int i = 0; i < array.length;i++) {
+            
+            List<FighterGPS> list = repository.findByName(array[i]);
+            
+            if(list.size() > 0){
+                FighterGPS last = list.get(list.size() - 1); 
+                actual[i] = mapper.writeValueAsString(last);
+            }
+            else{
+                actual[i] = "{empty}";
+            }
+            
+        }
         
-        return jsonString;
+        //String[] stringArray = Arrays.copyOf(actual, actual.length, String[].class);
+        
+        String strr = Arrays.toString(actual);
+        System.out.println(strr);
+        //ObjectMapper mapper = new ObjectMapper();
+        //Iterable<FighterGPS> ff = repository.findAll();//.forEach(x -> log.info(x.toString()));
+        //FighterGPS[] fs = Iterables.toArray(ff, FighterGPS.class);
+        //String jsonString = mapper.writeValueAsString(fs[fs.length-1]);
+        
+        return strr;
     }
     
     @KafkaListener(topics = "gps", groupId = "team")
@@ -94,6 +112,7 @@ public class ApiController {
         System.out.println("Received Messasge: " + jsonObject.toString());
         str = message;
         repository.save(t);
+        
         /*
         String[][] ffs;
         ffs = t.getFighters();

@@ -21,7 +21,7 @@ public class FighterGPS {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
     private String date;
-    private String id_ff;
+    private String name;
     private String type;
     private String gps_alt_tag;
     private String gps_tag_lat;
@@ -39,8 +39,8 @@ public class FighterGPS {
     public String getDate(){
         return date;
     }
-    public String getId_ff(){
-        return id_ff;
+    public String getName(){
+        return name;
     }
     public String getType(){
         return type;
@@ -59,17 +59,5 @@ public class FighterGPS {
     }
     public void setId() {
         this.id = id;
-    }
-    
-    
-    
-    @Override
-    public String toString() {
-    return "";
-           //"{ date:" + date +",gps_time_tag:"+gps_time_tag+",gps_tag_lat:"+gps_tag_lat+,"fighterID":"vr12","gps_alt_tag":"1142","gps_tag_long":"-8.16043226","type":"gps"}" 
-         /*   
-        "{ Time=" + times + " , " + country + " , "+ flightID +" , "+ longitude +" , "+ latitude +
-        '}';*/
-         
     }
 }

@@ -27,7 +27,7 @@ for f in onlyfiles:
             spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
             for row in spamreader:
                 firefighters[f.split('_')[0]][type_].append({
-                    'id_ff': f.split('_')[0],
+                    'name': f.split('_')[0],
                     'type' : type_,
                     'date': convert_to_timestamp(row[0]),
                     'gps_tag_lat': row[1],
@@ -40,7 +40,7 @@ for f in onlyfiles:
             spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
             for row in spamreader:
                 firefighters[f.split('_')[0]][type_].append({
-                    'id_ff': f.split('_')[0],
+                    'name': f.split('_')[0],
                     'type' : type_,
                     'date': convert_to_timestamp(row[0]),
                     'co': row[1],
@@ -56,7 +56,7 @@ for f in onlyfiles:
             spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
             for row in spamreader:
                 firefighters[f.split('_')[0]][type_].append({
-                    'id_ff': f.split('_')[0],
+                    'name': f.split('_')[0],
                     'type' : type_,                    
                     'date': convert_to_timestamp(row[0]),
                     'hr': row[1],
