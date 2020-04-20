@@ -5,16 +5,12 @@
  */
 package com.esp11.app;
 
-/**
- *
- * @author manuel
- */
 import org.springframework.data.repository.CrudRepository;
 
-import com.esp11.app.FireFighter;
+import com.esp11.app.FighterGPS;
 /**
  *
  * @author manuel
  */
-public interface Repository extends CrudRepository<FireFighter,Integer>{   
+public interface RepositoryGPS extends CrudRepository<FighterGPS,Integer>{   
 }

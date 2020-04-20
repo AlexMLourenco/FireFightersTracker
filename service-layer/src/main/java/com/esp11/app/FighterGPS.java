@@ -15,13 +15,13 @@ import javax.persistence.Id;
  * @author manuel
  */
 @Entity
-public class FireFighter {
+public class FighterGPS {
     
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
     private String date;
-    private String fighterID;
+    private String id_ff;
     private String type;
     private String gps_alt_tag;
     private String gps_tag_lat;
@@ -30,7 +30,7 @@ public class FireFighter {
     
  
     
-    public FireFighter(){
+    public FighterGPS(){
         
     }
     public Integer getId() {
@@ -39,8 +39,8 @@ public class FireFighter {
     public String getDate(){
         return date;
     }
-    public String getfighterID(){
-        return fighterID;
+    public String getId_ff(){
+        return id_ff;
     }
     public String getType(){
         return type;

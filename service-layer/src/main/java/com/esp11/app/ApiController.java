@@ -41,7 +41,7 @@ public class ApiController {
     @Autowired
     private RestTemplate restTemplate;
     @Autowired
-    private Repository repository;
+    private RepositoryGPS repository;
     
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
@@ -50,7 +50,7 @@ public class ApiController {
 
     //private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
     public String str = "";
-    FireFighter[] array = new FireFighter[3];
+    FighterGPS[] array = new FighterGPS[3];
     
     @GetMapping("/fighters")
     public String reportCurrentTime() throws JsonProcessingException {
@@ -78,19 +78,60 @@ public class ApiController {
         log.info("Flights in repository:");
         */
         ObjectMapper mapper = new ObjectMapper();
-        Iterable<FireFighter> ff = repository.findAll();//.forEach(x -> log.info(x.toString()));
-        FireFighter[] fs = Iterables.toArray(ff, FireFighter.class);
+        Iterable<FighterGPS> ff = repository.findAll();//.forEach(x -> log.info(x.toString()));
+        FighterGPS[] fs = Iterables.toArray(ff, FighterGPS.class);
         String jsonString = mapper.writeValueAsString(fs[fs.length-1]);
         
         return jsonString;
     }
     
-    @KafkaListener(topics = "fighters", groupId = "team")
-    public void listen(String message) throws JsonProcessingException {
+    @KafkaListener(topics = "gps", groupId = "team")
+    public void listenGPS(String message) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         JSONObject jsonObject = new JSONObject(message);
         Gson gson = new Gson();
-        FireFighter t = gson.fromJson(jsonObject.toString(), FireFighter.class);
+        FighterGPS t = gson.fromJson(jsonObject.toString(), FighterGPS.class);
+        System.out.println("Received Messasge: " + jsonObject.toString());
+        str = message;
+        repository.save(t);
+        /*
+        String[][] ffs;
+        ffs = t.getFighters();
+           
+        for (int i = 0; i < ffs.length; i++) {            
+            FireFighter ff = new FireFighter(t.getTime(),ffs[i]);
+            repository.save(ff);
+            array[i] = ff;
+        }
+*/
+        /*
+    }
+    @KafkaListener(topics = "hr", groupId = "team")
+    public void listenHR(String message) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        JSONObject jsonObject = new JSONObject(message);
+        Gson gson = new Gson();
+        FighterGPS t = gson.fromJson(jsonObject.toString(), FighterGPS.class);
+        System.out.println("Received Messasge: " + jsonObject.toString());
+        str = message;
+        repository.save(t);
+        /*
+        String[][] ffs;
+        ffs = t.getFighters();
+           
+        for (int i = 0; i < ffs.length; i++) {            
+            FireFighter ff = new FireFighter(t.getTime(),ffs[i]);
+            repository.save(ff);
+            array[i] = ff;
+        }
+
+    }
+    @KafkaListener(topics = "env", groupId = "team")
+    public void listenENV(String message) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        JSONObject jsonObject = new JSONObject(message);
+        Gson gson = new Gson();
+        FighterGPS t = gson.fromJson(jsonObject.toString(), FighterGPS.class);
         System.out.println("Received Messasge: " + jsonObject.toString());
         str = message;
         repository.save(t);
