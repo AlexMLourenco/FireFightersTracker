@@ -37,11 +37,11 @@
           </MglMarker>
         </div> -->
 
-        <div v-for="fire in fires" :key="fire.id">
+        <!-- <div v-for="fire in fires" :key="fire.id">
           <MglMarker :coordinates.sync="fire.coordinates">
             <v-icon slot="marker" color="red">mdi-fire</v-icon>
           </MglMarker>
-        </div>
+        </div> -->
 
       </MglMap>
 
@@ -104,9 +104,9 @@
         
       },
       async getFirefighters(){
-        console.log($this.store.actions.get_firefighters)
-        const res = await this.$store.state.dispatch("get_firefighters")
-        console.log(res)
+        // console.log($this.store.actions.get_firefighters)
+        // const res = await this.$store.state.dispatch("get_firefighters")
+        // console.log(res)
       },
       getUrl(){
         return "http://localhost:8080/fighters"

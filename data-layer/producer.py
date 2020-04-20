@@ -4,31 +4,70 @@ import json
 import csv
 import pprint
 import time
+from datetime import datetime
 
 from os import listdir
 from os.path import isfile, join
-onlyfiles = [f for f in listdir('./dataset/') if isfile(join('./dataset/', f))]
 
-print(str(onlyfiles))
+onlyfiles = [f for f in listdir('./dataset/') if isfile(join('./dataset/', f))]
 
 firefighters = {'vr12': {'gps': [], 'env':[], 'hr': []}, 'a1': {'gps': [], 'env':[], 'hr': []}, 'a2': {'gps': [], 'env':[], 'hr': []}}
 
-for f in onlyfiles:
-    if f.split('_')[1].split('.')[0] == 'gps':
-        with open('./dataset/' + f, newline='') as csvfile:
-            spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
+def convert_to_timestamp(datestring):
+    date = datestring.split('/')
+    a, b = date.index(datestring.split('/')[0]), date.index(datestring.split('/')[1])
+    date[b], date[a] = date[a], date[b]
+    date = '/'.join(date)
+    return datetime.timestamp(datetime.strptime(date,'%m/%d/%Y %H:%M'))
 
+for f in onlyfiles:
+    type_ = f.split('_')[1].split('.')[0]
+    if type_ == 'gps':
+        with open('./dataset/' + f, encoding='utf-8-sig', newline='') as csvfile:
+            spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
             for row in spamreader:
-                print(str(row))
-                firefighters[f.split('_')[0]]['gps'].append({
-                    'date': row[0],
+                firefighters[f.split('_')[0]][type_].append({
+                    'id_ff': f.split('_')[0],
+                    'type' : type_,
+                    'date': convert_to_timestamp(row[0]),
                     'gps_tag_lat': row[1],
                     'gps_tag_long': row[2],
                     'gps_time_tag': row[3],
                     'gps_alt_tag': row[4]
                 })
+    elif type_ == 'env':
+        with open('./dataset/' + f, encoding='utf-8-sig',newline='') as csvfile:
+            spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
+            for row in spamreader:
+                firefighters[f.split('_')[0]][type_].append({
+                    'id_ff': f.split('_')[0],
+                    'type' : type_,
+                    'date': convert_to_timestamp(row[0]),
+                    'co': row[1],
+                    'temp': row[2],
+                    'hgt': row[3],
+                    'no2': row[4],
+                    'hum': row[5],
+                    'lum': row[6],
+                    'battery': row[7]
+                })
+    elif type_ == 'hr':
+        with open('./dataset/' + f, encoding='utf-8-sig',newline='') as csvfile:
+            spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
+            for row in spamreader:
+                firefighters[f.split('_')[0]][type_].append({
+                    'id_ff': f.split('_')[0],
+                    'type' : type_,                    
+                    'date': convert_to_timestamp(row[0]),
+                    'hr': row[1],
+                })
 
-# pprint.pprint(firefighters['a1']['gps'])
+gps = firefighters['a1']['gps'] + firefighters['a1']['env'] + firefighters['a1']['hr'] + \
+      firefighters['a2']['gps'] + firefighters['a2']['env'] + firefighters['a2']['hr'] + \
+      firefighters['vr12']['gps'] + firefighters['vr12']['env'] + firefighters['vr12']['hr']
+
+new = sorted(gps, key = lambda i: i['date']) 
+pprint.pprint(new)
 # producer = KafkaProducer(bootstrap_servers=['localhost:9092'])
 
 # # Asynchronous by default
@@ -48,14 +87,23 @@ for f in onlyfiles:
 # print (record_metadata.offset)
 
 # produce json messages
+# for firefighter in firefighters.keys():
+#     for value in firefighters[firefighter]['gps']:
+#         value['fighterID'] = firefighter
+#         value['type'] = 'gps'
+#         producer.send('fighters', value)
+#         print('Produced information to topic firefighters')
+#         time.sleep(1)
+
 producer = KafkaProducer(value_serializer=lambda m: json.dumps(m).encode('ascii'))
-for firefighter in firefighters.keys():
-    for value in firefighters[firefighter]['gps']:
-        value['fighterID'] = firefighter
-        value['type'] = 'gps'
-        producer.send('fighters', value)
-        print('Produced information to topic firefighters')
-        time.sleep(5)
+for item in new:
+    if item['type'] == 'gps':
+        producer.send('gps', item)
+    elif item['type'] == 'env':
+        producer.send('env', item)
+    elif item['type'] == 'hr':
+        producer.send('hr', item)
+    time.sleep(1)
 
 # # produce asynchronously
 # for _ in range(100):
