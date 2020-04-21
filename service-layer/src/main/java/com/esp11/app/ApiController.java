@@ -58,8 +58,8 @@ public class ApiController {
     public String str = "";
     String[] array = {"a1","a2","vr12"};
     
-    @GetMapping("/fightersGPS")
-    public String reportCurrentTime() throws JsonProcessingException {
+    @GetMapping("/fighters/location")
+    public String fightersLocation() throws JsonProcessingException {
     
         ObjectMapper mapper = new ObjectMapper();
         String[] actual = new String[3];
@@ -72,20 +72,53 @@ public class ApiController {
                 actual[i] = mapper.writeValueAsString(last);
             }
             else{
-                actual[i] = "{empty}";
-            }
-            
+                actual[i] = "{}";
+            }   
         }
         
-        //String[] stringArray = Arrays.copyOf(actual, actual.length, String[].class);
-        
-        String strr = Arrays.toString(actual);
-        System.out.println(strr);
-        //ObjectMapper mapper = new ObjectMapper();
-        //Iterable<FighterGPS> ff = repository.findAll();//.forEach(x -> log.info(x.toString()));
-        //FighterGPS[] fs = Iterables.toArray(ff, FighterGPS.class);
-        //String jsonString = mapper.writeValueAsString(fs[fs.length-1]);
-        
+        String strr = Arrays.toString(actual); 
+        return strr;
+    }
+    
+    @GetMapping("/fighters/gps")
+    public String fightersGPS() throws JsonProcessingException {
+    
+        ObjectMapper mapper = new ObjectMapper();
+        Iterable<FighterGPS> ff = repositorygps.findAll();//.forEach(x -> log.info(x.toString()));
+        FighterGPS[] fs = Iterables.toArray(ff, FighterGPS.class);
+        String[] gps = new String[fs.length];
+        for(int i =0; i < fs.length;i++){
+            gps[i] = mapper.writeValueAsString(fs[i]);
+        }
+        String strr = Arrays.toString(gps);
+        return strr;
+    }
+    
+    @GetMapping("/fighters/hr")
+    public String fightersHR() throws JsonProcessingException {
+    
+        ObjectMapper mapper = new ObjectMapper();
+        Iterable<FighterHR> ff = repositoryhr.findAll();//.forEach(x -> log.info(x.toString()));
+        FighterHR[] fs = Iterables.toArray(ff, FighterHR.class);
+        String[] hr = new String[fs.length];
+        for(int i =0; i < fs.length;i++){
+            hr[i] = mapper.writeValueAsString(fs[i]);
+        }
+        String strr = Arrays.toString(hr);
+        return strr;    
+    }
+    
+    @GetMapping("/fighters/env")
+    public String fightersENV() throws JsonProcessingException {
+    
+        ObjectMapper mapper = new ObjectMapper();
+        Iterable<FighterENV> ff = repositoryenv.findAll();//.forEach(x -> log.info(x.toString()));
+        FighterENV[] fs = Iterables.toArray(ff, FighterENV.class);
+        String[] env = new String[fs.length];
+        for(int i =0; i < fs.length;i++){
+            env[i] = mapper.writeValueAsString(fs[i]);
+        }
+        String strr = Arrays.toString(env);
         return strr;
     }
     
@@ -96,10 +129,11 @@ public class ApiController {
         Gson gson = new Gson();
         FighterGPS t = gson.fromJson(jsonObject.toString(), FighterGPS.class);
         System.out.println("Received Messasge: " + jsonObject.toString());
-        str = message;
+        
         repositorygps.save(t);
 
     }
+    
     @KafkaListener(topics = "hr", groupId = "team")
     public void listenHR(String message) throws JsonProcessingException {
         
@@ -107,10 +141,8 @@ public class ApiController {
         Gson gson = new Gson();
         FighterHR t = gson.fromJson(jsonObject.toString(), FighterHR.class);
         System.out.println("Received Messasge: " + jsonObject.toString());
-        str = message;
+        
         repositoryhr.save(t);
-       
-
     }
  
     @KafkaListener(topics = "env", groupId = "team")
@@ -120,8 +152,7 @@ public class ApiController {
         Gson gson = new Gson();
         FighterENV t = gson.fromJson(jsonObject.toString(), FighterENV.class);
         System.out.println("Received Messasge: " + jsonObject.toString());
-        str = message;
-        repositoryenv.save(t);
         
+        repositoryenv.save(t);   
     }
 }

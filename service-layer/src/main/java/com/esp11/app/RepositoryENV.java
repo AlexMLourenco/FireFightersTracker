@@ -7,7 +7,7 @@ package com.esp11.app;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.esp11.app.FighterGPS;
+
 /**
  *
  * @author manuel

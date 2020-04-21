@@ -16,20 +16,13 @@ import javax.persistence.Id;
  */
 @Entity
 public class FighterHR {
-    
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
     private String date;
-    private String id_ff;
+    private String name;
     private String type;
-    private String co;
-    private String temp;
-    private String hgt;
-    private String no2;
-    private String hum;
-    private String lum;
-    private String battery;
+    private String hr;
     
     public FighterHR(){
         
@@ -40,31 +33,15 @@ public class FighterHR {
     public String getDate(){
         return date;
     }
-    public String getId_ff(){
-        return id_ff;
-    }
-    public String getType(){
+    public String getName(){
+        return name;
+    }public String getType(){
         return type;
     }
-    public String getCo(){
-        return co;
+    public String getHr(){
+        return hr;
     }
-    public String getTemp(){
-        return temp;
-    }
-    public String getHgt(){
-        return hgt;
-    }
-    public String getNo2(){
-        return no2;
-    }
-    public String getHum(){
-        return hum;
-    }
-    public String getLum(){
-        return lum;
-    }
-    public String getBattery(){
-        return battery;
-    }
+   
 }
+
+
