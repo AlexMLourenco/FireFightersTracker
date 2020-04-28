@@ -44,7 +44,11 @@ public class ApiController {
     @Autowired
     private RestTemplate restTemplate;
     @Autowired
-    private RepositoryGPS repository;
+    private RepositoryGPS repositorygps;
+    @Autowired
+    private RepositoryENV repositoryenv;
+    @Autowired
+    private RepositoryHR repositoryhr;
     
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
@@ -81,7 +85,7 @@ public class ApiController {
         String[] actual = new String[3];
         for (int i = 0; i < array.length;i++) {
             
-            List<FighterGPS> list = repository.findByName(array[i]);
+            List<FighterGPS> list = repositorygps.findByName(array[i]);
             
             if(list.size() > 0){
                 FighterGPS last = list.get(list.size() - 1); 
@@ -89,82 +93,86 @@ public class ApiController {
             }
             else{
                 actual[i] = "{}";
-            }
-            
+            }   
         }
         
-        //String[] stringArray = Arrays.copyOf(actual, actual.length, String[].class);
-        
-        String strr = Arrays.toString(actual);
-        System.out.println(strr);
-        //ObjectMapper mapper = new ObjectMapper();
-        //Iterable<FighterGPS> ff = repository.findAll();//.forEach(x -> log.info(x.toString()));
-        //FighterGPS[] fs = Iterables.toArray(ff, FighterGPS.class);
-        //String jsonString = mapper.writeValueAsString(fs[fs.length-1]);
-        
+        String strr = Arrays.toString(actual); 
+        return strr;
+    }
+    
+    @GetMapping("/fighters/gps")
+    public String fightersGPS() throws JsonProcessingException {
+    
+        ObjectMapper mapper = new ObjectMapper();
+        Iterable<FighterGPS> ff = repositorygps.findAll();//.forEach(x -> log.info(x.toString()));
+        FighterGPS[] fs = Iterables.toArray(ff, FighterGPS.class);
+        String[] gps = new String[fs.length];
+        for(int i =0; i < fs.length;i++){
+            gps[i] = mapper.writeValueAsString(fs[i]);
+        }
+        String strr = Arrays.toString(gps);
+        return strr;
+    }
+    
+    @GetMapping("/fighters/hr")
+    public String fightersHR() throws JsonProcessingException {
+    
+        ObjectMapper mapper = new ObjectMapper();
+        Iterable<FighterHR> ff = repositoryhr.findAll();//.forEach(x -> log.info(x.toString()));
+        FighterHR[] fs = Iterables.toArray(ff, FighterHR.class);
+        String[] hr = new String[fs.length];
+        for(int i =0; i < fs.length;i++){
+            hr[i] = mapper.writeValueAsString(fs[i]);
+        }
+        String strr = Arrays.toString(hr);
+        return strr;    
+    }
+    
+    @GetMapping("/fighters/env")
+    public String fightersENV() throws JsonProcessingException {
+    
+        ObjectMapper mapper = new ObjectMapper();
+        Iterable<FighterENV> ff = repositoryenv.findAll();//.forEach(x -> log.info(x.toString()));
+        FighterENV[] fs = Iterables.toArray(ff, FighterENV.class);
+        String[] env = new String[fs.length];
+        for(int i =0; i < fs.length;i++){
+            env[i] = mapper.writeValueAsString(fs[i]);
+        }
+        String strr = Arrays.toString(env);
         return strr;
     }
     
     @KafkaListener(topics = "gps", groupId = "team")
     public void listenGPS(String message) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        JSONObject jsonObject = new JSONObject(message);
-        Gson gson = new Gson();
-        FighterGPS t = gson.fromJson(jsonObject.toString(), FighterGPS.class);
-        System.out.println("Received Messasge: " + jsonObject.toString());
-        str = message;
-        repository.save(t);
         
-        /*
-        String[][] ffs;
-        ffs = t.getFighters();
-           
-        for (int i = 0; i < ffs.length; i++) {            
-            FireFighter ff = new FireFighter(t.getTime(),ffs[i]);
-            repository.save(ff);
-            array[i] = ff;
-        }
-*/
-        /*
-    }
-    @KafkaListener(topics = "hr", groupId = "team")
-    public void listenHR(String message) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
         JSONObject jsonObject = new JSONObject(message);
         Gson gson = new Gson();
         FighterGPS t = gson.fromJson(jsonObject.toString(), FighterGPS.class);
         System.out.println("Received Messasge: " + jsonObject.toString());
-        str = message;
-        repository.save(t);
-        /*
-        String[][] ffs;
-        ffs = t.getFighters();
-           
-        for (int i = 0; i < ffs.length; i++) {            
-            FireFighter ff = new FireFighter(t.getTime(),ffs[i]);
-            repository.save(ff);
-            array[i] = ff;
-        }
+        
+        repositorygps.save(t);
 
     }
-    @KafkaListener(topics = "env", groupId = "team")
-    public void listenENV(String message) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
+    
+    @KafkaListener(topics = "hr", groupId = "team")
+    public void listenHR(String message) throws JsonProcessingException {
+        
         JSONObject jsonObject = new JSONObject(message);
         Gson gson = new Gson();
-        FighterGPS t = gson.fromJson(jsonObject.toString(), FighterGPS.class);
+        FighterHR t = gson.fromJson(jsonObject.toString(), FighterHR.class);
         System.out.println("Received Messasge: " + jsonObject.toString());
-        str = message;
-        repository.save(t);
-        /*
-        String[][] ffs;
-        ffs = t.getFighters();
-           
-        for (int i = 0; i < ffs.length; i++) {            
-            FireFighter ff = new FireFighter(t.getTime(),ffs[i]);
-            repository.save(ff);
-            array[i] = ff;
-        }
-*/
+        
+        repositoryhr.save(t);
+    }
+ 
+    @KafkaListener(topics = "env", groupId = "team")
+    public void listenENV(String message) throws JsonProcessingException {
+        
+        JSONObject jsonObject = new JSONObject(message);
+        Gson gson = new Gson();
+        FighterENV t = gson.fromJson(jsonObject.toString(), FighterENV.class);
+        System.out.println("Received Messasge: " + jsonObject.toString());
+        
+        repositoryenv.save(t);   
     }
 }
