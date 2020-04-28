@@ -32,6 +32,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.google.gson.Gson;
 import java.util.Arrays;
 import java.util.List;
+import org.springframework.web.bind.annotation.CrossOrigin;
 /**
  *
  * @author manuel
@@ -54,7 +55,8 @@ public class ApiController {
     public String str = "";
     String[] array = {"a1","a2","vr12"};
     
-    @GetMapping("/fightersGPS")
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("/fighters/gps")
     public String reportCurrentTime() throws JsonProcessingException {
         /*
         Team f = restTemplate.getForObject(
@@ -86,7 +88,7 @@ public class ApiController {
                 actual[i] = mapper.writeValueAsString(last);
             }
             else{
-                actual[i] = "{empty}";
+                actual[i] = "{}";
             }
             
         }

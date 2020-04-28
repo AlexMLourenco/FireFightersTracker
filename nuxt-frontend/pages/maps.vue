@@ -24,25 +24,51 @@
         :accessToken="accessToken" 
         :mapStyle.sync="mapStyle"
         @load="onMapLoad">
-        <MglMarker :coordinates.sync="coordinates">
-            <v-icon slot="marker" color="red">mdi-fire</v-icon>
-            <!-- <v-icon slot="marker" color="red">mdi-fire-truck</v-icon> -->
-        </MglMarker>
-
-
-        <!-- <div v-for="fire in fires" :key="fire.id">
-          <MglMarker :coordinates="fire.coordinates">
+          <!-- <div v-if="firefighter != {}"> -->
             
-            <v-icon slot="marker">mdi-fire</v-icon>
-          </MglMarker>
-        </div> -->
+            <MglMarker v-for="(firefighter, index) in firefighters" :key="index" :coordinates.sync="firefighter.coordinates">
+              <v-icon slot="marker" color="red">mdi-fire-truck</v-icon>
+                <MglPopup>
+                <VCard>
+                  <p class="category d-inline-flex font-weight-light">
+                  GPS Location
+                  </p>
+                  <div>Longitude {{firefighter.gps_tag_long}} </div>
+                  <div>Latitude {{firefighter.gps_tag_lat}} </div>
+                  <p>Environment Data</p>
+                  <material-chart-card
+                    :data="dailySalesChart.data"
+                    :options="dailySalesChart.options"
+                    color="red"
+                    type="Line"
+                  >
+                    <h4 class="title font-weight-light">Quality of air</h4>
+                    <p class="category d-inline-flex font-weight-light">
+                      <v-icon
+                        color="red"
+                        small
+                      >
+                        mdi-arrow-up
+                      </v-icon>
+                      <span class="red--text">10%</span>&nbsp;
+                      CO Levels
+                    </p>
 
-        <!-- <div v-for="fire in fires" :key="fire.id">
-          <MglMarker :coordinates.sync="fire.coordinates">
-            <v-icon slot="marker" color="red">mdi-fire</v-icon>
-          </MglMarker>
-        </div> -->
+                    <template slot="actions">
+                      <v-icon
+                        class="mr-2"
+                        small
+                      >
+                        mdi-clock-outline
+                      </v-icon>
+                      <span class="caption grey--text font-weight-light">updated 4 minutes ago</span>
+                    </template>
+                  </material-chart-card>
 
+                </VCard>
+              </MglPopup>
+            </MglMarker>
+          <!-- </div> -->
       </MglMap>
 
     </div>  
@@ -52,18 +78,41 @@
 
 <script>
   import axios from "axios"
+  import materialCard from '~/components/material/AppCard'
+  import materialChartCard from '~/components/material/AppChartCard'
+  import materialStatsCard from '~/components/material/AppStatsCard'
+
   export default {
     layout: 'dashboard',
+    components:{
+      materialCard,
+      materialChartCard,
+      materialStatsCard
+    },
     data(){
         return {
           accessToken: 'pk.eyJ1IjoibnVubzc3NzYiLCJhIjoiY2s4cGo3eHJ4MTRnMjNkcXpqaHd5ZjB5cSJ9.pqySVQnXqXakFACfoQkdqQ', // your access token. Needed if you using Mapbox maps
           mapStyle: 'mapbox://styles/mapbox/streets-v11',
-          coordinates: [-8.630132,40.645427],
-          fires: [
-            {id: '1', coordinates: [-8.175346, 39.950672]},
-            {id: '2', coordinates: [-8.630132, 40.645472]},
-            {id: '3', coordinates: [-8.630132, 40.645489]},
-          ]
+          coordinates: [-8.16064851,40.06462326],
+          firefighters:[],
+          dailySalesChart: {
+          data: {
+            labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
+            series: [
+              [12, 17, 7, 17, 23, 18, 38]
+            ]
+          },
+          options: {
+            low: 0,
+            high: 50, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+            chartPadding: {
+              top: 20,
+              right: 0,
+              bottom: 0,
+              left: 0
+            }
+          }
+        }
         };
     },
     head () {
@@ -79,19 +128,36 @@
     methods: {
       async onMapLoad(event) {
         // Here we cathing 'load' map event
+        const firefighters = await this.getFirefighters()
+        this.firefighters = firefighters;
+        console.log('firefighters ', firefighters)
+        this.firefighters.forEach(firefighter => firefighter.coordinates = [firefighter.gps_tag_long, firefighter.gps_tag_lat])
+        console.log('firefighters ', firefighters)
         this.map = event.map;
-        this.$store.map = event.map;
 
-        const firefighter = this.getFirefighters()
+        this.$store.map = event.map;
+        // this.$store.map
+        
 
         const asyncActions = event.component.actions
-        
+                
+        // const test = await asyncActions.addSource('vr12', {
+        //   type: 'image',
+        //   url: '/firefighter.png',
+        //   coordinates: [
+        //       [-8.175346,39.950672],
+        //       [-8.630132, 40.645434],
+        //       [-8.630132, 40.645900],
+        //       [-8.630132, 40.645472]
+        //   ]
+        // });
+
 
         const newParams = await asyncActions.flyTo({
           // center: [40.645427,-8.630132],
-          center: [-8.630132,40.645427],
-          zoom: 7,
-          speed: 2
+          center: [firefighters[0].gps_tag_long,firefighters[0].gps_tag_lat],
+          zoom: 17,
+          speed: 3
         })
         console.log(newParams)
         /* => {
@@ -106,17 +172,43 @@
       async getFirefighters(){
         // console.log($this.store.actions.get_firefighters)
         // const res = await this.$store.state.dispatch("get_firefighters")
-        // console.log(res)
+        try{
+          const res = await axios.get(this.getUrl() + '/fighters/gps')
+          console.log(res.data)
+          return res.data
+        }catch(error){
+          console.log(error)
+        }
+
+      },
+      async fetchFirefighters(){
+        try{
+          const res = await axios.get(this.getUrl() + '/fighters/gps')
+          this.firefighters = res.data
+          this.firefighters.forEach( firefighter => firefighter.coordinates = [firefighter.gps_tag_long,firefighter.gps_tag_lat])
+        }catch(error){
+          console.log(error)
+        }   
       },
       getUrl(){
-        return "http://localhost:8080/fighters"
+        return "http://localhost:8080"
       }
     },
     computed: {
       firefighersState(){
         
       }
+    },
+    created(){
+      this.fetchFirefighters();
+      this.timer = setInterval(this.fetchFirefighters, 3000)
     }
+    // ,
+    // async fetch(){
+    //   const res = await axios.get(this.getUrl() + '/fighters/gps')
+    //   this.firefighters = res.data
+    //   console.log(this.firefighters)
+    // }
 }
 
 </script>

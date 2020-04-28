@@ -103,7 +103,8 @@ for item in new:
         producer.send('env', item)
     elif item['type'] == 'hr':
         producer.send('hr', item)
-    time.sleep(1)
+    pprint.pprint(item['type'])
+    time.sleep(0.1)
 
 # # produce asynchronously
 # for _ in range(100):
