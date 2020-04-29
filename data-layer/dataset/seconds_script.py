@@ -14,7 +14,7 @@ with open(initial_file[1], "r") as csv_file, open("tmp.csv", "w") as outFile:
     for row in csv_reader:
         
         if check == row[0]:
-            seconds = seconds + 10
+            seconds = seconds + 1
             data = ([f'{row[0]}:{seconds};{row[1]};{row[2]};{row[3]};{row[4]};{row[5]};{row[6]};{row[7]};{row[8]}'])
             print(data)
             csv_writer.writerow(data)
