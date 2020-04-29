@@ -91,18 +91,19 @@ public class ApiController {
                 FighterGPS last = list.get(list.size() - 1); 
                 actual[i] = mapper.writeValueAsString(last);
             }
-            else{
-                actual[i] = "{}";
-            }   
+            //else{
+             //   actual[i] = "{}";
+            //}   
         }
         
         String strr = Arrays.toString(actual); 
         return strr;
     }
     
-    @GetMapping("/fighters/gps")
+    @GetMapping("/fighters/gpsInfo")
     public String fightersGPS() throws JsonProcessingException {
     
+        
         ObjectMapper mapper = new ObjectMapper();
         Iterable<FighterGPS> ff = repositorygps.findAll();//.forEach(x -> log.info(x.toString()));
         FighterGPS[] fs = Iterables.toArray(ff, FighterGPS.class);
