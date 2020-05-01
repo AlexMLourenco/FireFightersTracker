@@ -25,6 +25,7 @@ for f in onlyfiles:
     if type_ == 'gps':
         with open('./dataset/' + f, encoding='utf-8-sig', newline='') as csvfile:
             spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
+            
             for row in spamreader:
                 firefighters[f.split('_')[0]][type_].append({
                     'name': f.split('_')[0],
@@ -103,8 +104,8 @@ for item in new:
         producer.send('env', item)
     elif item['type'] == 'hr':
         producer.send('hr', item)
-    pprint.pprint(item['type'])
-    time.sleep(0.1)
+    pprint.pprint(item)
+    time.sleep(0.04)
 
 # # produce asynchronously
 # for _ in range(100):

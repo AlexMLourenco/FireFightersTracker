@@ -30,6 +30,7 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
 import com.google.gson.Gson;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -82,21 +83,24 @@ public class ApiController {
         log.info("Flights in repository:");
          */
         ObjectMapper mapper = new ObjectMapper();
-        String[] actual = new String[3];
+        List<String> actual = new ArrayList<String>();
+        
         for (int i = 0; i < array.length;i++) {
             
             List<FighterGPS> list = repositorygps.findByName(array[i]);
             
             if(list.size() > 0){
                 FighterGPS last = list.get(list.size() - 1); 
-                actual[i] = mapper.writeValueAsString(last);
+                actual.add(mapper.writeValueAsString(last));
             }
             //else{
              //   actual[i] = "{}";
             //}   
         }
+       
+        Object[] array = actual.toArray();
+        String strr = Arrays.toString(array); 
         
-        String strr = Arrays.toString(actual); 
         return strr;
     }
     
