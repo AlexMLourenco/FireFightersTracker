@@ -5,6 +5,7 @@
  */
 package com.esp11.app;
 
+import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 
 
@@ -13,4 +14,6 @@ import org.springframework.data.repository.CrudRepository;
  * @author manuel
  */
 public interface RepositoryHR extends CrudRepository<FighterHR,Integer>{   
+        List<FighterHR> findByName(String name);
+
 }

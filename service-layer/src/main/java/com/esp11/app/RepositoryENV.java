@@ -5,6 +5,7 @@
  */
 package com.esp11.app;
 
+import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 
 
@@ -12,5 +13,6 @@ import org.springframework.data.repository.CrudRepository;
  *
  * @author manuel
  */
-public interface RepositoryENV extends CrudRepository<FighterENV,Integer>{   
+public interface RepositoryENV extends CrudRepository<FighterENV,Integer>{ 
+    List<FighterENV> findByName(String name);
 }
