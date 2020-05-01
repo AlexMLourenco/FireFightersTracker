@@ -41,6 +41,22 @@ public class FighterHR {
     public String getHr(){
         return hr;
     }
+    public void setName(String name){
+        this.name = name;
+    }
+    public void setHR(String hr){
+        this.hr = hr;
+    }
+    
+    public boolean checkHR(){
+        int rate = Integer.parseInt(this.hr);
+        if (rate > 100){
+            return true;  
+        }
+        else{
+            return false;
+        }
+    }
    
 }
 
