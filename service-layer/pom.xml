@@ -103,17 +103,17 @@
       <version>19.0</version>
       <type>jar</type>
     </dependency>
+      <dependency>
+          <groupId>io.cucumber</groupId>
+          <artifactId>cucumber-java</artifactId>
+          <version>5.6.0</version>
+          <scope>test</scope>
+      </dependency>
     <dependency>
-        <groupId>info.cukes</groupId>
-        <artifactId>cucumber-java</artifactId>
+        <groupId>io.cucumber</groupId>
+        <artifactId>cucumber-junit</artifactId>
+        <version>5.6.0</version>
         <scope>test</scope>
-        <version>1.0.11</version>
-    </dependency>
-    <dependency>
-        <groupId>info.cukes</groupId>
-        <artifactId>cucumber-jvm</artifactId>
-        <version>1.0.11</version>
-        <type>pom</type>
     </dependency>
   </dependencies>
 <!--
