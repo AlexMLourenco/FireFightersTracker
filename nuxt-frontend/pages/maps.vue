@@ -36,34 +36,7 @@
                   <div>Longitude {{firefighter.gps_tag_long}} </div>
                   <div>Latitude {{firefighter.gps_tag_lat}} </div>
                   <p>Environment Data</p>
-                  <material-chart-card
-                    :data="dailySalesChart.data"
-                    :options="dailySalesChart.options"
-                    color="red"
-                    type="Line"
-                  >
-                    <h4 class="title font-weight-light">Quality of air</h4>
-                    <p class="category d-inline-flex font-weight-light">
-                      <v-icon
-                        color="red"
-                        small
-                      >
-                        mdi-arrow-up
-                      </v-icon>
-                      <span class="red--text">10%</span>&nbsp;
-                      CO Levels
-                    </p>
-
-                    <template slot="actions">
-                      <v-icon
-                        class="mr-2"
-                        small
-                      >
-                        mdi-clock-outline
-                      </v-icon>
-                      <span class="caption grey--text font-weight-light">updated 4 minutes ago</span>
-                    </template>
-                  </material-chart-card>
+                  
 
                 </VCard>
               </MglPopup>
@@ -190,6 +163,8 @@
           console.log(error)
         }   
       },
+
+
       getUrl(){
         return "http://localhost:8080"
       }

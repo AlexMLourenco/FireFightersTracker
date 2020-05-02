@@ -30,6 +30,7 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
 import com.google.gson.Gson;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -61,7 +62,7 @@ public class ApiController {
     
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/fighters/gps")
-    public String reportCurrentTime() throws JsonProcessingException {
+    public String fightersLocation() throws JsonProcessingException {
         /*
         Team f = restTemplate.getForObject(
         "https://opensky-network.org/api/states/all", Team.class);
@@ -82,21 +83,70 @@ public class ApiController {
         log.info("Flights in repository:");
          */
         ObjectMapper mapper = new ObjectMapper();
-        String[] actual = new String[3];
+        List<String> actual = new ArrayList<String>();
+        
         for (int i = 0; i < array.length;i++) {
             
             List<FighterGPS> list = repositorygps.findByName(array[i]);
             
             if(list.size() > 0){
                 FighterGPS last = list.get(list.size() - 1); 
-                actual[i] = mapper.writeValueAsString(last);
+                actual.add(mapper.writeValueAsString(last));
             }
             //else{
              //   actual[i] = "{}";
             //}   
         }
+       
+        Object[] array = actual.toArray();
+        String strr = Arrays.toString(array); 
         
-        String strr = Arrays.toString(actual); 
+        return strr;
+    }
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("/fighters/env")
+    public String fightersEnvironment() throws JsonProcessingException {
+       
+        ObjectMapper mapper = new ObjectMapper();
+        List<String> actual = new ArrayList<String>();
+        
+        for (int i = 0; i < array.length;i++) {
+            
+            List<FighterENV> list = repositoryenv.findByName(array[i]);
+            
+            if(list.size() > 0){
+                FighterENV last = list.get(list.size() - 1); 
+                actual.add(mapper.writeValueAsString(last));
+            }
+            
+        }
+       
+        Object[] array = actual.toArray();
+        String strr = Arrays.toString(array); 
+        
+        return strr;
+    }
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("/fighters/hr")
+    public String fightersRate() throws JsonProcessingException {
+       
+        ObjectMapper mapper = new ObjectMapper();
+        List<String> actual = new ArrayList<String>();
+        
+        for (int i = 0; i < array.length;i++) {
+            
+            List<FighterHR> list = repositoryhr.findByName(array[i]);
+            
+            if(list.size() > 0){
+                FighterHR last = list.get(list.size() - 1); 
+                actual.add(mapper.writeValueAsString(last));
+            }
+            
+        }
+       
+        Object[] array = actual.toArray();
+        String strr = Arrays.toString(array); 
+        
         return strr;
     }
     
@@ -115,7 +165,7 @@ public class ApiController {
         return strr;
     }
     
-    @GetMapping("/fighters/hr")
+    @GetMapping("/fighters/hrInfo")
     public String fightersHR() throws JsonProcessingException {
     
         ObjectMapper mapper = new ObjectMapper();
@@ -129,7 +179,7 @@ public class ApiController {
         return strr;    
     }
     
-    @GetMapping("/fighters/env")
+    @GetMapping("/fighters/envInfo")
     public String fightersENV() throws JsonProcessingException {
     
         ObjectMapper mapper = new ObjectMapper();
