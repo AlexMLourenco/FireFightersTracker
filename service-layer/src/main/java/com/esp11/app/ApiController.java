@@ -183,10 +183,11 @@ public class ApiController {
                 else{
                     fighter.add("hr:{}");
                 }
+                String json =new Gson().toJson(fighter);
                 String strr = mapper.writeValueAsString(fighter);
                 //Object[] arr = fighter.toArray();
                 //String strr = Arrays.toString(arr);
-                actual.add(strr);
+                actual.add(json);
             }
             
         }
