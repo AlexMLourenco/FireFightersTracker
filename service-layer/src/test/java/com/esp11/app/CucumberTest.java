@@ -7,7 +7,8 @@ import org.junit.runner.RunWith;
 @RunWith(Cucumber.class)
 @CucumberOptions(
         strict = true,
-        features = "src/test/java/resources",
+        dryRun = false,
+        features = "src/test/resources",
         glue = "com.esp11.app",
         plugin = {"json:target/Cucumber.json"}
 )
