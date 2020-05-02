@@ -32,7 +32,9 @@ import org.springframework.web.servlet.ModelAndView;
 import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.springframework.web.bind.annotation.CrossOrigin;
 /**
  *
@@ -148,6 +150,51 @@ public class ApiController {
         String strr = Arrays.toString(array); 
         
         return strr;
+    }
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("/fighters/all")
+    public String fightersINFO() throws JsonProcessingException {
+       
+        ObjectMapper mapper = new ObjectMapper();
+        List<String> actual = new ArrayList<>();
+        
+        for (int i = 0; i < array.length;i++) {
+            List<FighterGPS> gps = repositorygps.findByName(array[i]);
+            List<FighterENV> env = repositoryenv.findByName(array[i]);
+            List<FighterHR> hr = repositoryhr.findByName(array[i]);
+            
+            if(gps.size() > 0){
+               
+                List<String> fighter = new ArrayList<>();
+                FighterGPS lastgps = gps.get(gps.size() - 1);
+                fighter.add("id:"+array[i]);
+                fighter.add("gps:"+mapper.writeValueAsString(lastgps));
+
+                if(env.size() > 0){
+                    FighterENV lastenv = env.get(env.size() - 1);
+                    fighter.add("env:"+mapper.writeValueAsString(lastenv));     
+                }else{
+                    fighter.add("env:{}");
+                }
+                if(hr.size() > 0){
+                    FighterHR lasthr = hr.get(hr.size() - 1);
+                    fighter.add("hr:"+mapper.writeValueAsString(lasthr));    
+                }
+                else{
+                    fighter.add("hr:{}");
+                }
+                
+                Object[] arr = fighter.toArray();
+                String strr = Arrays.toString(arr);
+                actual.add(strr);
+            }
+            
+        }
+       
+        Object[] arr2 = actual.toArray();
+        String send = Arrays.toString(arr2); 
+        
+        return send;
     }
     
     @GetMapping("/fighters/gpsInfo")
