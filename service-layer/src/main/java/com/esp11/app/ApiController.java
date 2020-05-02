@@ -183,9 +183,9 @@ public class ApiController {
                 else{
                     fighter.add("hr:{}");
                 }
-                
-                Object[] arr = fighter.toArray();
-                String strr = Arrays.toString(arr);
+                String strr = mapper.writeValueAsString(fighter);
+                //Object[] arr = fighter.toArray();
+                //String strr = Arrays.toString(arr);
                 actual.add(strr);
             }
             
