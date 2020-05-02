@@ -10,11 +10,15 @@ package com.esp11.app;
  * @author manuel
  */
 public class MessageFormat {
-    private String id;
+   /* private String id;
     private String gps;
     private String env;
     private String hr;
-    
+*/
+    private String id;
+    private FighterGPS gps;
+    private FighterENV env;
+    private FighterHR hr;
     
     public MessageFormat(){
        
@@ -22,24 +26,24 @@ public class MessageFormat {
     public String getId(){
         return id;
     }
-    public String getGPS(){
+    public FighterGPS getGPS(){
         return gps;
     }
-    public String getENV(){
+    public FighterENV getENV(){
         return env;
     }
-    public String getHR(){
+    public FighterHR getHR(){
         return hr;
     }
     public void setID(String id){
         this.id = id;
     }
-    public void setGPS(String gps){
+    public void setGPS(FighterGPS gps){
         this.gps = gps;
     }
-    public void setENV(String env){
+    public void setENV(FighterENV env){
         this.env = env;
-    }public void setHR(String hr){
+    }public void setHR(FighterHR hr){
         this.hr = hr;
     }
     

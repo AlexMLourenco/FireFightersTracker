@@ -164,40 +164,24 @@ public class ApiController {
             List<FighterHR> hr = repositoryhr.findByName(array[i]);
             
             if(gps.size() > 0){
-                MessageFormat fighter = new MessageFormat();
-                //List<String> fighter = new ArrayList<>();
-                FighterGPS lastgps = gps.get(gps.size() - 1);
-                //fighter.add("id:"+array[i]);
-                fighter.setID(array[i]);
-                fighter.setGPS(mapper.writeValueAsString(lastgps));
-                //fighter.add("gps:"+mapper.writeValueAsString(lastgps));
                 
+                MessageFormat fighter = new MessageFormat();           
+                FighterGPS lastgps = gps.get(gps.size() - 1);  
+                fighter.setID(array[i]);
+                fighter.setGPS(lastgps);
+
                 if(env.size() > 0){
                     FighterENV lastenv = env.get(env.size() - 1);
-                    //fighter.add("env:"+mapper.writeValueAsString(lastenv));  
-                    fighter.setENV(mapper.writeValueAsString(lastenv));
-                }else{
-                    //fighter.add("env:{}");
-                    fighter.setENV("{}");
+                      
+                    fighter.setENV(lastenv);
                 }
                 if(hr.size() > 0){
                     FighterHR lasthr = hr.get(hr.size() - 1);
-                    //fighter.add("hr:"+mapper.writeValueAsString(lasthr));    
-                    fighter.setHR(mapper.writeValueAsString(lasthr));
-                }
-                else{
-                    //fighter.add("hr:{}");
-                    fighter.setHR("{}");
-                }
-                //String json =new Gson().toJson(fighter);
-                //String strr = mapper.writeValueAsString(fighter);
-                //Object[] arr = fighter.toArray();
-                //String strr = Arrays.toString(arr);
+                    fighter.setHR(lasthr);
+                }   
                 actual.add(mapper.writeValueAsString(fighter));
-            }
-            
+            }   
         }
-       
         Object[] arr2 = actual.toArray();
         String send = Arrays.toString(arr2); 
         
