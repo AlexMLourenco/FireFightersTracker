@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'maven:3-alpine' 
-            args '-v /root/.m2:/root/.m2' 
-        }
-    }
+    agent any 
     stages {
         stage('Build') { 
             steps {
@@ -19,7 +14,7 @@ pipeline {
         }
         stage('Artifactory Deploy') { 
             steps {
-                sh 'mvn deploy -f service-layer/pom.xml ' 
+                sh 'mvn deploy -f service-layer/pom.xml -DskipTests' 
             }
         }
 	stage('Build Docker Image') { 
