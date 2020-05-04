@@ -14,7 +14,7 @@ pipeline {
         }
         stage('Artifactory Deploy') { 
             steps {
-                sh 'mvn deploy -f service-layer/pom.xml -DskipTests' 
+                sh 'mvn deploy -f service-layer/pom.xml -s service-layer/settings.xml' 
             }
         }
 	stage('Build Docker Image') { 
