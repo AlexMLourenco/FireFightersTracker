@@ -19,6 +19,7 @@ pipeline {
         }
 	stage('Build Docker Image') { 
             steps {
+                sh "docker rmi -f esp11-service-layer"
                 sh "docker build -t esp11-service-layer ."
                 sh "docker tag esp11-service-layer 192.168.160.99:5000/esp11-service-layer"
                 sh "docker push 192.168.160.99:5000/esp11-service-layer"
