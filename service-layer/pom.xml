@@ -9,9 +9,9 @@
         <version>2.2.4.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
   </parent>
-  <groupId>pt.ua.deti.g11</groupId>
+  <groupId>pt.ua.deti.es.p11</groupId>
   <artifactId>java-maven-app</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>0.0.1</version>
   
 
   <name>java-maven-app</name>
@@ -19,6 +19,8 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <!--<maven.compiler.source>1.7</maven.compiler.source>
+    <maven.compiler.target>1.7</maven.compiler.target> -->
     <java.version>1.8</java.version>
   </properties>
 
@@ -28,11 +30,11 @@
            <name>c04a282c7a6d-releases</name>
            <url>http://192.168.160.99:8081/artifactory/libs-release-local</url>
        </repository>
-       <snapshotRepository>
+<!--       <snapshotRepository>
             <id>snapshots</id>
             <name>c04a282c7a6d-snapshots</name>
             <url>http://192.168.160.99:8081/artifactory/libs-snapshot-local</url>
-         </snapshotRepository>
+         </snapshotRepository>-->
    </distributionManagement>
 
   <dependencies>
@@ -116,7 +118,7 @@
       <dependency>
           <groupId>org.testng</groupId>
           <artifactId>testng</artifactId>
-          <version>6.14.3</version>
+          <version>6.9.10</version>
           <scope>test</scope>
       </dependency>
       <dependency>
@@ -127,10 +129,59 @@
       </dependency>
 
   </dependencies>
-
-    <build>
-    <pluginManagement>
-        <plugins> </plugins>
-    </pluginManagement>
-  </build>
+  <build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+<!--
+  <build> --> 
+<!--     
+    <pluginManagement>   lock down plugins versions to    Aavoid using Maven defaults (may be moved to parent pom) 
+      <plugins> 
+         clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle 
+        <plugin>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>3.1.0</version>
+        </plugin>
+         default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging 
+        <plugin>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>3.0.2</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.8.0</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.22.1</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>3.0.2</version>
+        </plugin>
+       <plugin>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>2.5.2</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>2.8.2</version>
+        </plugin>
+         site lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle 
+        <plugin>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>3.7.1</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-project-info-reports-plugin</artifactId>
+          <version>3.0.0</version>
+        </plugin>
+     </plugins>
+   </pluginManagement>
+  </build> -->
 </project>
