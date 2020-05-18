@@ -36,7 +36,7 @@ pipeline {
 	stage('Runtime Deployment') { 
             steps {
                 sshagent(credentials: ['esp11_ssh_credentials']){
-                    sh "ssh -o 'StrictHostKeyChecking=no' -l esp11 192.168.160.103 docker rm -f esp11-service-layer"
+                    //sh "ssh -o 'StrictHostKeyChecking=no' -l esp11 192.168.160.103 docker rm -f esp11-service-layer"
                     sh "ssh -o 'StrictHostKeyChecking=no' -l esp11 192.168.160.103 docker run -d -p 11000:11080 --name esp11-service-layer 192.168.160.99:5000/esp11-service-layer"
                 }
             }
