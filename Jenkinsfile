@@ -43,29 +43,29 @@ pipeline {
             }
         }
     }
-    post {
-        success {
-            echo "Test succeeded"
-            script {
+    // post {
+    //     success {
+    //         echo "Test succeeded"
+    //         script {
 
-                mail(bcc: '',
-                     body: "Run ${JOB_NAME}-#${BUILD_NUMBER} succeeded. To get more details, visit the build results page: ${BUILD_URL}.",
-                     cc: '',
-                     from: 'jenkins-admin@gmail.com',
-                     replyTo: '',
-                     subject: "${JOB_NAME} ${BUILD_NUMBER} succeeded",
-                     to: env.notification_email)
-            }
-        }
-        failure {
-            echo "Test failed"
-            mail(bcc: '',
-                body: "Run ${JOB_NAME}-#${BUILD_NUMBER} succeeded. To get more details, visit the build results page: ${BUILD_URL}.",
-                 cc: '',
-                 from: 'jenkins-admin@gmail.com',
-                 replyTo: '',
-                 subject: "${JOB_NAME} ${BUILD_NUMBER} failed",
-                 to: env.notification_email)
-        }
-    }
+    //             mail(bcc: '',
+    //                  body: "Run ${JOB_NAME}-#${BUILD_NUMBER} succeeded. To get more details, visit the build results page: ${BUILD_URL}.",
+    //                  cc: '',
+    //                  from: 'jenkins-admin@gmail.com',
+    //                  replyTo: '',
+    //                  subject: "${JOB_NAME} ${BUILD_NUMBER} succeeded",
+    //                  to: env.notification_email)
+    //         }
+    //     }
+    //     failure {
+    //         echo "Test failed"
+    //         mail(bcc: '',
+    //             body: "Run ${JOB_NAME}-#${BUILD_NUMBER} succeeded. To get more details, visit the build results page: ${BUILD_URL}.",
+    //              cc: '',
+    //              from: 'jenkins-admin@gmail.com',
+    //              replyTo: '',
+    //              subject: "${JOB_NAME} ${BUILD_NUMBER} failed",
+    //              to: env.notification_email)
+    //     }
+    // }
 }
