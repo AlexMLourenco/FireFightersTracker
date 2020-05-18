@@ -34,7 +34,7 @@ public class KafkaConsumerConfig {
         Map<String, Object> props = new HashMap<>();
         props.put(
           ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, 
-         "localhost:9092");
+         "192.168.160.103:9092");
         props.put(
           ConsumerConfig.GROUP_ID_CONFIG, 
           "team");

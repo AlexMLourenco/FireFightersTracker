@@ -231,7 +231,7 @@ public class ApiController {
         return strr;
     }
     
-    @KafkaListener(topics = "gps", groupId = "team")
+    @KafkaListener(topics = "esp11_gps", groupId = "team")
     public void listenGPS(String message) throws JsonProcessingException {
         
         JSONObject jsonObject = new JSONObject(message);
@@ -243,7 +243,7 @@ public class ApiController {
 
     }
     
-    @KafkaListener(topics = "hr", groupId = "team")
+    @KafkaListener(topics = "esp11_hr", groupId = "team")
     public void listenHR(String message) throws JsonProcessingException {
         
         JSONObject jsonObject = new JSONObject(message);
@@ -254,7 +254,7 @@ public class ApiController {
         repositoryhr.save(t);
     }
  
-    @KafkaListener(topics = "env", groupId = "team")
+    @KafkaListener(topics = "esp11_env", groupId = "team")
     public void listenENV(String message) throws JsonProcessingException {
         
         JSONObject jsonObject = new JSONObject(message);
