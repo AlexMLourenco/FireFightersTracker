@@ -1,20 +1,19 @@
 pipeline {
     agent any 
     parameters {
-       // choice(choices: 'yes\nno', description: 'Are you sure you want to execute this test?', name: 'run_test_only')
+        choice(choices: 'yes\nno', description: 'Are you sure you want to execute this test?', name: 'run_test_only')
         string(defaultValue: "lhsantos@ua.pt", description: 'email for notifications', name: 'notification_email')
     }
     stages {
         stage('Build') { 
-            
             steps {
                 sh 'mvn -f service-layer/pom.xml -B -DskipTests clean package' 
             }
         }
 	stage('Test') {
-            // when {
-            //     environment name: 'run_test_only', value: 'yes'
-            // }
+            when {
+                 environment name: 'run_test_only', value: 'yes'
+            }
             steps {
                 sh 'mvn -f service-layer/ test'
             }
