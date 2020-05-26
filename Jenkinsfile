@@ -16,7 +16,6 @@ pipeline {
             }
             steps {
                 sh 'mvn -f service-layer/ test'
-                sh 'mvn -f testTest/ test'
             }
             
         }
