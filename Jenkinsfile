@@ -7,7 +7,7 @@ pipeline {
     stages {
         stage('Build') { 
             steps {
-                sh 'mvn -f service-layer/pom.xml -B -DskipTests clean package' 
+                sh 'mvn -f service-layer/pom.xml -B -DskipTests clean package'
             }
         }
 	stage('Test') {
@@ -16,6 +16,7 @@ pipeline {
             }
             steps {
                 sh 'mvn -f service-layer/ test'
+                sh 'mvn -f testTest/testRest/ test'
             }
             
         }
