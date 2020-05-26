@@ -15,7 +15,13 @@ import io.cucumber.junit.Cucumber;
 import io.cucumber.junit.CucumberOptions;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(features = "src/test/resources", plugin = {"pretty", "html:target/cucumber/planejane"})
+@CucumberOptions(
+        strict = true,
+        dryRun = false,
+        features = "src/test/resources",
+        glue = "com.esp11.app",
+        plugin = {"json:target/Cucumber.json"}
+)
 public class LocationIntegrationTest {
     
 }
