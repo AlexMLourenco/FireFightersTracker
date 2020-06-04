@@ -30,13 +30,13 @@ pipeline {
 		        parallel(
                     Service_Layer: {
                                 sh "docker rmi -f esp11-service-layer"
-                                sh "docker build --no-cache -t esp11-service-layer /service-layer"
+                                sh "docker build --no-cache -t esp11-service-layer service-layer"
                                 sh "docker tag esp11-service-layer 192.168.160.99:5000/esp11-service-layer"
                                 sh "docker push 192.168.160.99:5000/esp11-service-layer"
                     },
                     Frontend: {
                                 sh "docker rmi -f esp11-frontend"
-                                sh "docker build --no-cache -t esp11-frontend /nuxt-frontend"
+                                sh "docker build --no-cache -t esp11-frontend nuxt-frontend"
                                 sh "docker tag esp11-frontend 192.168.160.99:5000/esp11-frontend"
                                 sh "docker push 192.168.160.99:5000/esp11-frontend"
                     }
