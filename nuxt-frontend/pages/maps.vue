@@ -2,46 +2,45 @@
   <div>
     <client-only placeholder="Loading...">
     <div class="mapouter">
-      <!-- 
-        
-        <div class="gmap_canvas">
-
-        <iframe
-          id="gmap_canvas"
-          width="100%"
-          height="100%"
-          src="https://maps.google.com/maps?width=700&amp;height=440&amp;hl=en&amp;q=Lisbon%2C%Portugal+(Titre)&amp;ie=UTF8&amp;t=&amp;z=10&amp;iwloc=B&amp;output=embed"
-          frameborder="0"
-          scrolling="no"
-          marginheight="0"
-          marginwidth="0"
-        />
-      </div> 
-      
-      -->
-
       <MglMap 
         :accessToken="accessToken" 
         :mapStyle.sync="mapStyle"
         @load="onMapLoad">
-          <!-- <div v-if="firefighter != {}"> -->
-            
-            <MglMarker v-for="(firefighter, index) in firefighters" :key="index" :coordinates.sync="firefighter.coordinates">
+
+            <MglMarker v-for="(firefighter, index) in firefighters" :key="index" :coordinates.sync="firefighter.gps.coordinates">
               <v-icon slot="marker" color="red">mdi-fire-truck</v-icon>
                 <MglPopup>
-                <VCard>
+                  <VCard>
                   <p class="category d-inline-flex font-weight-light">
                   GPS Location
                   </p>
-                  <div>Longitude {{firefighter.gps_tag_long}} </div>
-                  <div>Latitude {{firefighter.gps_tag_lat}} </div>
-                  <p>Environment Data</p>
-                  
-
-                </VCard>
+                  <div>Longitude {{firefighter.gps.gps_tag_long}} </div>
+                  <div>Latitude {{firefighter.gps.gps_tag_lat}} </div>
+                  <p></p>
+                  <p class="category d-inline-flex font-weight-light">
+                  Environment Data
+                  </p>
+                  <div>CO {{firefighter.env.co}} </div>
+                  <div>            
+                    <v-icon
+                      class="mr-2"
+                      small
+                      color="blue"
+                    >
+                      mdi-temperature-celsius
+                    </v-icon>
+                    Temperature {{firefighter.env.temp}} 
+                  </div>
+                  <div>HGT {{firefighter.env.hgt}} </div>
+                  <div>NO2 {{firefighter.env.no2}} </div>
+                  <div>HUM {{firefighter.env.hum}} </div>
+                  <div>LUM {{firefighter.env.lum}} </div>
+                  <div>Battery {{firefighter.env.battery}} </div>
+                  <div>Heart Rate {{firefighter.hr.hr}}</div>
+                  </VCard>
               </MglPopup>
             </MglMarker>
-          <!-- </div> -->
+
       </MglMap>
 
     </div>  
@@ -103,9 +102,7 @@
         // Here we cathing 'load' map event
         const firefighters = await this.getFirefighters()
         this.firefighters = firefighters;
-        console.log('firefighters ', firefighters)
-        this.firefighters.forEach(firefighter => firefighter.coordinates = [firefighter.gps_tag_long, firefighter.gps_tag_lat])
-        console.log('firefighters ', firefighters)
+        this.firefighters.forEach( firefighter => firefighter.gps.coordinates = [firefighter.gps.gps_tag_long,firefighter.gps.gps_tag_lat])
         this.map = event.map;
 
         this.$store.map = event.map;
@@ -128,7 +125,7 @@
 
         const newParams = await asyncActions.flyTo({
           // center: [40.645427,-8.630132],
-          center: [firefighters[0].gps_tag_long,firefighters[0].gps_tag_lat],
+          center: [firefighters[0].gps.gps_tag_long,firefighters[0].gps.gps_tag_lat],
           zoom: 17,
           speed: 3
         })
@@ -146,19 +143,18 @@
         // console.log($this.store.actions.get_firefighters)
         // const res = await this.$store.state.dispatch("get_firefighters")
         try{
-          const res = await axios.get(this.getUrl() + '/fighters/gps')
-          console.log(res.data)
+          const res = await axios.get(this.getUrl() + '/fighters/all')
           return res.data
         }catch(error){
           console.log(error)
         }
-
       },
       async fetchFirefighters(){
         try{
-          const res = await axios.get(this.getUrl() + '/fighters/gps')
+          const res = await axios.get(this.getUrl() + '/fighters/all')
           this.firefighters = res.data
-          this.firefighters.forEach( firefighter => firefighter.coordinates = [firefighter.gps_tag_long,firefighter.gps_tag_lat])
+          this.firefighters.forEach( firefighter => firefighter.gps.coordinates = [firefighter.gps.gps_tag_long,firefighter.gps.gps_tag_lat])
+          // console.log('depois', this.firefighters)
         }catch(error){
           console.log(error)
         }   
@@ -166,11 +162,11 @@
 
 
       getUrl(){
-        return "http://localhost:8080"
+        return "http://192.168.160.103:10080"
       }
     },
     computed: {
-      firefighersState(){
+      firefighterId(){
         
       }
     },
@@ -178,12 +174,6 @@
       this.fetchFirefighters();
       this.timer = setInterval(this.fetchFirefighters, 3000)
     }
-    // ,
-    // async fetch(){
-    //   const res = await axios.get(this.getUrl() + '/fighters/gps')
-    //   this.firefighters = res.data
-    //   console.log(this.firefighters)
-    // }
 }
 
 </script>

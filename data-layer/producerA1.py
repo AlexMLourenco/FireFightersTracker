@@ -77,7 +77,7 @@ for item in new:
         producer.send('env', item)
     elif item['type'] == 'hr':
         producer.send('hr', item)
-    time.sleep(1)
+    time.sleep(0.03)
 
 # # produce asynchronously
 # for _ in range(100):
