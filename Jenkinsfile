@@ -28,13 +28,13 @@ pipeline {
 	stage('Build Docker Image') { 
             steps {
 		        parallel(
-                    service-layer build: {
+                    service-layer: {
                                 sh "docker rmi -f esp11-service-layer"
                                 sh "docker build --no-cache -t esp11-service-layer /service-layer"
                                 sh "docker tag esp11-service-layer 192.168.160.99:5000/esp11-service-layer"
                                 sh "docker push 192.168.160.99:5000/esp11-service-layer"
                     },
-                    frontend build: {
+                    frontend: {
                                 sh "docker rmi -f esp11-frontend"
                                 sh "docker build --no-cache -t esp11-frontend /nuxt-frontend"
                                 sh "docker tag esp11-frontend 192.168.160.99:5000/esp11-frontend"
@@ -44,17 +44,18 @@ pipeline {
 			 
             }
         }
+        
 	stage('Runtime Deployment') { 
             steps {
                 sshagent(credentials: ['esp11_ssh_credentials']){
                     parallel(
-                        service-layer deployment:{
+                        service-layer-deployment:{
                             sh "ssh -o 'StrictHostKeyChecking=no' -l esp11 192.168.160.103 docker rm -f esp11-service-layer"
-                            sh "ssh -o 'StrictHostKeyChecking=no' -l esp11 192.168.160.103 docker run -d -p 11000:11080 --name esp11-service-layer 192.168.160.99:5000/esp11-service-layer"
+                            sh "ssh -o 'StrictHostKeyChecking=no' -l esp11 192.168.160.103 docker run -d -p 11080:8080 --name esp11-service-layer 192.168.160.99:5000/esp11-service-layer"
                         }
                          service-layer deployment:{
                             sh "ssh -o 'StrictHostKeyChecking=no' -l esp11 192.168.160.103 docker rm -f esp11-frontend"
-                            sh "ssh -o 'StrictHostKeyChecking=no' -l esp11 192.168.160.103 docker run -d -p 11000:11080 --name esp11-frontend 192.168.160.99:5000/esp11-frontend"
+                            sh "ssh -o 'StrictHostKeyChecking=no' -l esp11 192.168.160.103 docker run -d -p 11300:3000 --name esp11-frontend 192.168.160.99:5000/esp11-frontend"
                         }
                     )
                 }
