@@ -68,7 +68,7 @@ public class ApiController {
         return "1.0";
     }
     
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "http://192.168.160.103:11300")
     @GetMapping("/fighters/gps")
     public String fightersLocation() throws JsonProcessingException {
         /*
@@ -111,7 +111,7 @@ public class ApiController {
         
         return strr;
     }
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "http://192.168.160.103:11300")
     @GetMapping("/fighters/env")
     public String fightersEnvironment() throws JsonProcessingException {
        
@@ -134,7 +134,7 @@ public class ApiController {
         
         return strr;
     }
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "http://192.168.160.103:11300")
     @GetMapping("/fighters/hr")
     public String fightersRate() throws JsonProcessingException {
        
@@ -157,7 +157,7 @@ public class ApiController {
         
         return strr;
     }
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "http://192.168.160.103:11300")
     @GetMapping("/fighters/all")
     public String fightersINFO() throws JsonProcessingException {
        
