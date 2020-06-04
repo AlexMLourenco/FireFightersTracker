@@ -47,18 +47,20 @@ pipeline {
         
 	stage('Runtime Deployment') { 
             steps {
-                sshagent(credentials: ['esp11_ssh_credentials']){
                     parallel(
                         Service_layer:{
-                            sh "ssh -o 'StrictHostKeyChecking=no' -l esp11 192.168.160.103 docker rm -f esp11-service-layer"
-                            sh "ssh -o 'StrictHostKeyChecking=no' -l esp11 192.168.160.103 docker run -d -p 11080:8080 --name esp11-service-layer 192.168.160.99:5000/esp11-service-layer"
+                            sshagent(credentials: ['esp11_ssh_credentials']){
+                                sh "ssh -o 'StrictHostKeyChecking=no' -l esp11 192.168.160.103 docker rm -f esp11-service-layer"
+                                sh "ssh -o 'StrictHostKeyChecking=no' -l esp11 192.168.160.103 docker run -d -p 11080:8080 --name esp11-service-layer 192.168.160.99:5000/esp11-service-layer"
+                            }
                         },
                         Frontend:{
-                            sh "ssh -o 'StrictHostKeyChecking=no' -l esp11 192.168.160.103 docker rm -f esp11-frontend"
-                            sh "ssh -o 'StrictHostKeyChecking=no' -l esp11 192.168.160.103 docker run -d -p 11300:3000 --name esp11-frontend 192.168.160.99:5000/esp11-frontend"
+                            sshagent(credentials: ['esp11_ssh_credentials']){
+                                sh "ssh -o 'StrictHostKeyChecking=no' -l esp11 192.168.160.103 docker rm -f esp11-frontend"
+                                sh "ssh -o 'StrictHostKeyChecking=no' -l esp11 192.168.160.103 docker run -d -p 11300:3000 --name esp11-frontend 192.168.160.99:5000/esp11-frontend"
+                            }
                         }
                     )
-                }
             }
         }
     }
