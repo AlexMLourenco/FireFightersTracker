@@ -6,8 +6,7 @@ import io.cucumber.java.en.Then;
 import static org.junit.Assert.assertEquals;
 
 public class AlarmStepdefs {
-    
-    private String today;
+
     public FighterHR fighter = new FighterHR();
 
     @Given("^The firefighter number \"([^\"]*)\"$")

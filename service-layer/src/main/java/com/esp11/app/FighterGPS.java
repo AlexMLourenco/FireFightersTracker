@@ -60,4 +60,7 @@ public class FighterGPS {
     public void setId() {
         this.id = id;
     }
+    public void setName(String name){
+        this.name = name;
+    }
 }

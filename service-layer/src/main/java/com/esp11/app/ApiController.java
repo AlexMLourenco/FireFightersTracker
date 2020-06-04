@@ -36,6 +36,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 /**
  *
  * @author manuel
@@ -61,6 +63,10 @@ public class ApiController {
     //private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
     public String str = "";
     String[] array = {"a1","a2","vr12"};
+    @GetMapping("/version")
+    public String version() throws JsonProcessingException {
+        return "1.0";
+    }
     
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/fighters/gps")
@@ -231,7 +237,7 @@ public class ApiController {
         return strr;
     }
     
-    @KafkaListener(topics = "gps", groupId = "team")
+    @KafkaListener(topics = "esp11_gps", groupId = "team")
     public void listenGPS(String message) throws JsonProcessingException {
         
         JSONObject jsonObject = new JSONObject(message);
@@ -243,7 +249,7 @@ public class ApiController {
 
     }
     
-    @KafkaListener(topics = "hr", groupId = "team")
+    @KafkaListener(topics = "esp11_hr", groupId = "team")
     public void listenHR(String message) throws JsonProcessingException {
         
         JSONObject jsonObject = new JSONObject(message);
@@ -254,7 +260,7 @@ public class ApiController {
         repositoryhr.save(t);
     }
  
-    @KafkaListener(topics = "env", groupId = "team")
+    @KafkaListener(topics = "esp11_env", groupId = "team")
     public void listenENV(String message) throws JsonProcessingException {
         
         JSONObject jsonObject = new JSONObject(message);

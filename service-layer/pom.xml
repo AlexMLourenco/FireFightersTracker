@@ -9,9 +9,9 @@
         <version>2.2.4.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
   </parent>
-  <groupId>pt.ua.deti.g11</groupId>
+  <groupId>pt.ua.deti.es.p11</groupId>
   <artifactId>java-maven-app</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>0.0.1</version>
   
 
   <name>java-maven-app</name>
@@ -30,11 +30,11 @@
            <name>c04a282c7a6d-releases</name>
            <url>http://192.168.160.99:8081/artifactory/libs-release-local</url>
        </repository>
-       <snapshotRepository>
+<!--       <snapshotRepository>
             <id>snapshots</id>
             <name>c04a282c7a6d-snapshots</name>
             <url>http://192.168.160.99:8081/artifactory/libs-snapshot-local</url>
-         </snapshotRepository>
+         </snapshotRepository>-->
    </distributionManagement>
 
   <dependencies>
@@ -63,6 +63,7 @@
     <dependency>
         <groupId>mysql</groupId>
         <artifactId>mysql-connector-java</artifactId>
+        <scope>runtime</scope>
     </dependency>
     <dependency>
         <groupId>org.springframework.boot</groupId>
@@ -121,12 +122,50 @@
           <version>6.9.10</version>
           <scope>test</scope>
       </dependency>
+      <dependency>
+          <groupId>org.mockito</groupId>
+          <artifactId>mockito-all</artifactId>
+          <version>1.10.19</version>
+          <scope>test</scope>
+      </dependency>
+      <dependency>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-simple</artifactId>
+          <version>1.7.25</version>
+          <scope>test</scope>
+      </dependency>
+      <dependency>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-nop</artifactId>
+          <version>1.7.25</version>
+          <scope>test</scope>
+      </dependency>
+      <dependency>
+	<groupId>org.springframework.kafka</groupId>
+	<artifactId>spring-kafka-test</artifactId>
+        <scope>test</scope>
+      </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.5</version>
+      <scope>test</scope>
+      <type>jar</type>
+    </dependency>
   </dependencies>
+  <build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
 <!--
--->   <build><!--
-     
--->    <pluginManagement>  <!-- lock down plugins versions to    Aavoid using Maven defaults (may be moved to parent pom)--> <!--
--->      <plugins> <!--
+  <build> --> 
+<!--     
+    <pluginManagement>   lock down plugins versions to    Aavoid using Maven defaults (may be moved to parent pom) 
+      <plugins> 
          clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle 
         <plugin>
           <artifactId>maven-clean-plugin</artifactId>
@@ -166,7 +205,7 @@
           <artifactId>maven-project-info-reports-plugin</artifactId>
           <version>3.0.0</version>
         </plugin>
--->      </plugins><!--
--->    </pluginManagement>
-  </build>
+     </plugins>
+   </pluginManagement>
+  </build> -->
 </project>
