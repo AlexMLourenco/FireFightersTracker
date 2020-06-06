@@ -54,7 +54,8 @@ public class ApiController {
     private RepositoryENV repositoryenv;
     @Autowired
     private RepositoryHR repositoryhr;
-    
+    @Autowired
+    private RepositoryAlarm repositoryalarms;
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
     
@@ -134,27 +135,59 @@ public class ApiController {
         
         return strr;
     }
+    
     @CrossOrigin(origins = "http://192.168.160.103:11300")
-    @GetMapping("/fighters/hr")
-    public String fightersRate() throws JsonProcessingException {
+    @GetMapping("/alarms/last")
+    public String alarmsLast() throws JsonProcessingException {
        
         ObjectMapper mapper = new ObjectMapper();
         List<String> actual = new ArrayList<String>();
-        
+        List<String> alarms = new ArrayList<String>();
+        boolean sendBD = false;
         for (int i = 0; i < array.length;i++) {
             
-            List<FighterHR> list = repositoryhr.findByName(array[i]);
-            
+            List<FighterENV> list = repositoryenv.findByName(array[i]);
+            List<FighterHR> list2 = repositoryhr.findByName(array[i]);
+            alarm a = new alarm(array[i]);
             if(list.size() > 0){
-                FighterHR last = list.get(list.size() - 1); 
-                actual.add(mapper.writeValueAsString(last));
+                FighterENV last = list.get(list.size() - 1);
+                
+                if (Integer.parseInt(last.getCo()) >= 25){
+                    a.setCo("true");
+                    sendBD = true;
+                }
             }
-            
+            if(list2.size() > 0){
+                FighterHR last2 = list2.get(list2.size() - 1);
+                if (Double.parseDouble(last2.getHr()) >= 100.0){
+                    a.setHr("true");
+                    sendBD = true;
+                }
+     
+            }
+            if(sendBD){
+                repositoryalarms.save(a);
+            }
+            actual.add(mapper.writeValueAsString(a));   
         }
        
         Object[] array = actual.toArray();
         String strr = Arrays.toString(array); 
         
+        return strr;
+    }
+    @CrossOrigin(origins = "http://192.168.160.103:11300")
+    @GetMapping("/alarms/all")
+    public String alarmsAll() throws JsonProcessingException {
+       
+        ObjectMapper mapper = new ObjectMapper();
+        Iterable<alarm> ff = repositoryalarms.findAll();
+        alarm[] fs = Iterables.toArray(ff, alarm.class);
+        String[] alarm = new String[fs.length];
+        for(int i =0; i < fs.length;i++){
+            alarm[i] = mapper.writeValueAsString(fs[i]);
+        }
+        String strr = Arrays.toString(alarm);
         return strr;
     }
     @CrossOrigin(origins = "http://192.168.160.103:11300")
@@ -237,36 +270,36 @@ public class ApiController {
         return strr;
     }
     
-    @KafkaListener(topics = "esp11_gps", groupId = "team")
+    @KafkaListener(topics = "gps", groupId = "team")
     public void listenGPS(String message) throws JsonProcessingException {
         
         JSONObject jsonObject = new JSONObject(message);
         Gson gson = new Gson();
         FighterGPS t = gson.fromJson(jsonObject.toString(), FighterGPS.class);
-        System.out.println("Received Messasge: " + jsonObject.toString());
+        //System.out.println("Received Messasge: " + jsonObject.toString());
         
         repositorygps.save(t);
 
     }
     
-    @KafkaListener(topics = "esp11_hr", groupId = "team")
+    @KafkaListener(topics = "hr", groupId = "team")
     public void listenHR(String message) throws JsonProcessingException {
         
         JSONObject jsonObject = new JSONObject(message);
         Gson gson = new Gson();
         FighterHR t = gson.fromJson(jsonObject.toString(), FighterHR.class);
-        System.out.println("Received Messasge: " + jsonObject.toString());
+       
         
         repositoryhr.save(t);
     }
  
-    @KafkaListener(topics = "esp11_env", groupId = "team")
+    @KafkaListener(topics = "env", groupId = "team")
     public void listenENV(String message) throws JsonProcessingException {
         
         JSONObject jsonObject = new JSONObject(message);
         Gson gson = new Gson();
         FighterENV t = gson.fromJson(jsonObject.toString(), FighterENV.class);
-        System.out.println("Received Messasge: " + jsonObject.toString());
+       
         
         repositoryenv.save(t);   
     }
