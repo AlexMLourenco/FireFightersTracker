@@ -2,6 +2,10 @@ import VuetifyLoaderPlugin from 'vuetify-loader/lib/plugin'
 import pkg from './package'
 export default {
   mode: 'universal',
+  server: { 
+    port: 3000,   
+    host: '0.0.0.0'
+  }, 
 
   /*
   ** Headers of the page
@@ -62,7 +66,7 @@ export default {
 
   proxy: {
     '/api' : {
-      target: 'http://localhost:8080/',
+      target: 'http://192.168.160.103:11080/',
       parthRewrite:{'^/':'/'}, 
     }
   },
