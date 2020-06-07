@@ -155,6 +155,7 @@ public class ApiController {
                 if (Integer.parseInt(last.getCo()) >= 25){
                     a.setCo("true");
                     sendBD = true;
+                    a.setDate(last.getDate());
                 }
             }
             if(list2.size() > 0){
@@ -162,6 +163,7 @@ public class ApiController {
                 if (Double.parseDouble(last2.getHr()) >= 100.0){
                     a.setHr("true");
                     sendBD = true;
+                    a.setDate(last2.getDate());
                 }
      
             }
