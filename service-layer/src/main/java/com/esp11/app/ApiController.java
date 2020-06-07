@@ -275,6 +275,23 @@ public class ApiController {
     public String dashBoard() throws JsonProcessingException {
   
         ObjectMapper mapper = new ObjectMapper();
+        List<String> actual = new ArrayList<>();
+        for (int i = 0; i < array.length;i++) {
+            
+            List<FighterENV> env = repositoryenv.findByName(array[i]);
+            List<FighterHR> hr = repositoryhr.findByName(array[i]);
+            HashMap<String, Object> board = new HashMap<String, Object>();
+            
+            board.put("env", env);
+            board.put("hr", hr);
+            board.put("id", array[i]);
+            actual.add(mapper.writeValueAsString(board));
+        }
+        Object[] arr2 = actual.toArray();
+        String send = Arrays.toString(arr2); 
+        
+        return send;
+        /*
         Iterable<FighterENV> ff = repositoryenv.findAll();//.forEach(x -> log.info(x.toString()));
         FighterENV[] fs = Iterables.toArray(ff, FighterENV.class);
         
@@ -286,6 +303,7 @@ public class ApiController {
         board.put("env", fs);
         board.put("hr", fs2);
         return mapper.writeValueAsString(board);
+*/
     }
     
     @KafkaListener(topics = "gps", groupId = "team")
