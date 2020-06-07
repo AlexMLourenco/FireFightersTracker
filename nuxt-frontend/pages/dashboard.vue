@@ -26,12 +26,12 @@
         lg4
       >
         <material-chart-card
-          :data="dailySalesChart.data"
-          :options="dailySalesChart.options"
+          :data="graph_co.data"
+          :options="graph_co.options"
           color="info"
           type="Line"
         >
-          <h4 class="title font-weight-light">Active Fires</h4>
+          <h4 class="title font-weight-light">CO Levels</h4>
           <p class="category d-inline-flex font-weight-light">
             <v-icon
               color="green"
@@ -60,13 +60,12 @@
         lg4
       >
         <material-chart-card
-          :data="emailsSubscriptionChart.data"
-          :options="emailsSubscriptionChart.options"
-          :responsive-options="emailsSubscriptionChart.responsiveOptions"
+          :data="graph_hr.data"
+          :options="graph_hr.options"
           color="red"
-          type="Bar"
+          type="Line"
         >
-          <h4 class="title font-weight-light">Active Firefighters</h4>
+          <h4 class="title font-weight-light">Heart Rate BPM</h4>
           <p class="category d-inline-flex font-weight-light">Number of active firefighters</p>
 
           <template slot="actions">
@@ -86,8 +85,8 @@
         lg4
       >
         <material-chart-card
-          :data="dataCompletedTasksChart.data"
-          :options="dataCompletedTasksChart.options"
+          :data="graph_temperature.data"
+          :options="graph_temperature.options"
           color="green"
           type="Line"
         >
@@ -279,14 +278,76 @@
             ]
           },
           options: {
-            low: 0,
-            high: 100, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+            low: 10,
+            high: 40, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
             chartPadding: {
               top: 0,
               right: 0,
               bottom: 0,
               left: 0
             }
+          }
+        },
+
+        graph_temperature: {
+          data: {
+            labels: [],
+            series: [
+              []
+            ]
+          },
+          options: {
+            
+          low: 20,
+          high: 40, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+          chartPadding: {
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0
+          }
+          // maintainAspectRatio: true,
+          }
+        },
+
+        graph_co: {
+          data: {
+            labels: [],
+            series: [
+              []
+            ]
+          },
+          options: {
+            
+          low: 0,
+          high: 120, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+          chartPadding: {
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0
+          }
+          // maintainAspectRatio: true,
+          }
+        },
+        graph_hr: {
+          data: {
+            labels: [],
+            series: [
+              []
+            ]
+          },
+          options: {
+            
+          low: 40,
+          high: 150, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+          chartPadding: {
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0
+          }
+          // maintainAspectRatio: true,
           }
         },
         emailsSubscriptionChart: {
@@ -388,10 +449,13 @@
         firefighters_ex: [
           'vr12', 'a1', 'a2'
         ],
-        selectedFirefighter: 'vr12',
+        selectedFirefighter: 'a1',
         loading:false,
-        firefighter:{ "id": "vr12", "gps": { "id": 51438, "date": "1557944700,0", "name": "vr12", "type": "gps", "gps_alt_tag": "1110", "gps_tag_lat": "40.06451668", "gps_tag_long": "-8.1615259", "gps_time_tag": "1110", "coordinates": [ "-8.1615259", "40.06451668" ] }, "env": { "id": 51444, "date": "1557944700,0", "name": "vr12", "type": "env", "co": "0", "temp": "28", "hgt": "-22", "no2": "0.9", "hum": "-1", "lum": "24", "battery": "101" }, "hr": { "id": 51493, "date": "1557944700,0", "name": "vr12", "type": "hr", "hr": "101.0217575" } }
-
+        firefighter:{ "id": "a1", "gps": { "id_temper": 51438, "date": "1557944700,0", "name": "vr12", "type": "gps", "gps_alt_tag": "1110", "gps_tag_lat": "40.06451668", "gps_tag_long": "-8.1615259", "gps_time_tag": "1110", "coordinates": [ "-8.1615259", "40.06451668" ] }, "env": { "id": 51444, "date": "1557944700,0", "name": "vr12", "type": "env", "co": "0", "temp": "28", "hgt": "-22", "no2": "0.9", "hum": "-1", "lum": "24", "battery": "101" }, "hr": { "id": 51493, "date": "1557944700,0", "name": "vr12", "type": "hr", "hr": "101.0217575" } }
+        ,
+        graph_temperature_timestamp:[],
+        graph_co_series:[],
+        graph_co_timestamp:[]
       }
     },
     methods: {
@@ -400,16 +464,61 @@
       },
       async onDashboardLoad(){
         const firefighters = await this.getFirefighters();
+        const info = await this.getInfo();
+
         this.firefighters = firefighters;
+        this.info = info;
         console.log('firefighters dashboard load', this.firefighters)
+        console.log('info',this.info)
+
         for (var f in this.firefighters){
-          console.log(this.firefighters[f].id === 'vr12')
-          console.log(this.firefighters[f])
-          if (this.firefighters[f].id === 'vr12'){
+          // console.log(this.firefighters[f].id === 'vr12')
+          // console.log(this.firefighters[f])
+          if (this.firefighters[f].id === 'a1'){
             this.firefighter = this.firefighters[f]
-            console.log('firefighter == vr12', this.firefighters[f])
+            this.firefighter_graphs = this.info[f]
+            }
+          }     
+
+          this.env = this.firefighter_graphs.env
+          this.hr = this.firefighter_graphs.hr
+          // console.log(this.env)
+          // this.env.forEach( env_value => env_value.env = {'temp': env_value.temp, 'timestamp': env_value.date})
+          //Popular os graficos
+          for (var e in this.env){
+            // console.log(this.graph_temperature[e])
+            if (this.graph_temperature[this.graph_temperature.length - 1] != this.env[e].temp &&
+                this.graph_co[this.graph_co.length - 1] != this.env[e].co){
+                var date = new Date(this.env[e].date * 1000)
+                var string = date.getHours() + ':' + date.getMinutes()
+                if (date.getMinutes() % 15 === 0){
+                  this.graph_temperature.data.series[0].push(this.env[e].temp)
+                  this.graph_temperature.data.labels.push(string)
+                  this.graph_co.data.series[0].push(this.env[e].co)
+                  this.graph_co.data.labels.push(string)
+                }
+            }
           }
-        }
+
+          for (var hr in this.heartrate){
+            if (this.graph_hr[this.graph_hr.length - 1] != this.heartrate[hr].hr){
+                console.log(this.heartrate[hr])
+                var date = new Date(this.heartrate[hr].date * 1000)
+                var string = date.getHours() + ':' + date.getMinutes()    
+                if (date.getMinutes() % 15 === 0){
+                  this.graph_hr.data.series[0].push(this.heartrate[hr].hr)
+                  this.graph_hr.data.labels.push(string)
+                }
+            }
+
+          }
+
+
+          console.log(this.graph_temperature)
+          console.log(this.graph_hr)
+          
+      
+        
       },
       async getFirefighters(){
         // console.log($this.store.actions.get_firefighters)
@@ -420,26 +529,82 @@
         }catch(error){
           console.log(error)
         }
-      }
-      ,
+      },
+      async getInfo(){
+        // console.log($this.store.actions.get_firefighters)
+        // const res = await this.$store.state.dispatch("get_firefighters")
+        try{
+          const res = await axios.get(this.getUrl() + '/dashboard')
+
+          return res.data
+        }catch(error){
+          console.log(error)
+        }
+      },
       async fetchAllInfo(){
         try{
           const res_dash = await axios.get(this.getUrl() + '/dashboard')
           const res_fighters = await axios.get(this.getUrl() + '/fighters/all')
           this.firefighters = res_fighters.data
+          this.info = res_dash.data
+
           //Separa os bombeiros 
           this.firefighters.forEach( firefighter => firefighter.gps.coordinates = [firefighter.gps.gps_tag_long,firefighter.gps.gps_tag_lat])
-          console.log(this.firefighters)
+          // console.log(this.firefighters)
           for (var f in this.firefighters){
             if (this.firefighters[f].id === this.selectedFirefighter){
               this.firefighter = this.firefighters[f]
+              this.firefighter_graphs = this.info[f]
             }
           }
 
           //this.dataCompletedTasksChart.series = 
           
-          this.info = res_dash.data
-          console.log(this.info)
+          // console.log(this.info)
+          
+          this.env = this.firefighter_graphs.env
+          // console.log(this.env)
+          // this.env.forEach( env_value => env_value.env = {'temp': env_value.temp, 'timestamp': env_value.date})
+
+          
+          //Popular os graficos
+          for (var e in this.env){
+            if (this.graph_temperature[this.graph_temperature.length - 1] != this.env[e].temp &&
+                this.graph_co[this.graph_co.length - 1] != this.env[e].co){
+              //  if (this.graph_temperature.data.series[0].length < 30){
+                
+                var date = new Date(this.env[e].date * 1000)
+                var string = date.getHours() + ':' + date.getMinutes()
+                if (date.getMinutes() % 15 === 0){
+                  this.graph_temperature.data.series[0].push(this.env[e].temp)
+                  this.graph_temperature.data.labels.push(string)
+                  this.graph_co.data.series[0].push(this.env[e].co)
+                  this.graph_co.data.labels.push(string)
+                }
+              // }
+            }
+            // if (this.graph_co_series[this.graph_co_series.length - 1] != this.env[e].co){
+            //   this.graph_co_series.push(this.env[e].temp)
+            //   this.graph_co_series.push(this.env[e].date)
+            // }
+          }
+
+          for (var hr in this.heartrate){
+            if (this.graph_hr[this.graph_hr.length - 1] != this.heartrate[hr].hr){
+                var date = new Date(this.heartrate[hr].date * 1000)
+                var string = date.getHours() + ':' + date.getMinutes()    
+                if (date.getMinutes() % 15 === 0){
+                  this.graph_hr.data.series[0].push(this.heartrate[hr].hr)
+                  this.graph_hr.data.labels.push(string)
+                }
+            }
+          }
+
+          // this.dataCompletedTasksChart.series = this.graph_temperature_series
+          // this.dataCompletedTasksChart.labels = this.graph_temperature_timestamp
+          // console.log('data_completed_tasksseries',this.dataCompletedTasksChart.series)
+          
+          // console.log('after',this.env)
 
         }catch(error){
           console.log(error)
@@ -451,11 +616,65 @@
         // this.$emit('changeFirefighter', this.message)
         for (var f in this.firefighters){
             if (this.firefighters[f].id === this.selectedFirefighter){
-              this.firefighter = this.firefighters[f]
+              this.firefighter_graphs = this.info[f]
             }
-        }
-        console.log(this.firefighter)
+          }
+
+          //this.dataCompletedTasksChart.series = 
+          
+          // console.log(this.info)
+          
+          this.env = this.firefighter_graphs.env
+          // console.log(this.env)
+          // this.env.forEach( env_value => env_value.env = {'temp': env_value.temp, 'timestamp': env_value.date})
+
+          this.new_data = []
+          //Popular os graficos
+          this.graph_temperature.data.series[0] = []
+          this.graph_temperature.data.labels = []
+          this.graph_co.data.series[0] = []
+          this.graph_co.data.labels = []
+          
+          for (var e in this.env){
+            if (this.graph_temperature[this.graph_temperature.length - 1] != this.env[e].temp &&
+                this.graph_co[this.graph_co.length - 1] != this.env[e].co){
+              //  if (this.graph_temperature.data.series[0].length < 30){
+                  // console.log(this.env[e].date)
+                var date = new Date(this.env[e].date * 1000)
+                var string = date.getHours() + ':' + date.getMinutes()
+                // console.log(date.getMinutes())
+                if (date.getMinutes() % 15 === 0){
+                  this.graph_temperature.data.series[0].push(this.env[e].temp)
+                  this.graph_temperature.data.labels.push(string)
+                  this.graph_co.data.series[0].push(this.env[e].co)
+                  this.graph_co.data.labels.push(string)
+                  console.log(string)
+                }
+              // }
+            }
+            // if (this.graph_co_series[this.graph_co_series.length - 1] != this.env[e].co){
+            //   this.graph_co_series.push(this.env[e].temp)
+            //   this.graph_co_series.push(this.env[e].date)
+            // }
+          }
+          for (var hr in this.heartrate){
+            if (this.graph_hr[this.graph_hr.length - 1] != this.heartrate[hr].temp){
+                var date = new Date(this.env[e].date * 1000)
+                var string = date.getHours() + ':' + date.getMinutes()    
+                if (date.getMinutes() % 15 === 0){
+                  this.graph_hr.data.series[0].push(this.heartrate[hr].hr)
+                  this.graph_hr.data.labels.push(string)
+                }
+            }
+            
+
+          }
+
+          // this.dataCompletedTasksChart.series = this.graph_temperature_series
+
+          // this.dataCompletedTasksChart.labels = this.graph_temperature_timestamp
         
+          // console.log(this.dataCompletedTasksChart)
 
       },
       getUrl(){
@@ -469,6 +688,7 @@
         // setTimeout(() => this.$nuxt.$loading.finish(), 500)
         this.onDashboardLoad()
         console.log('onload firefighter', this.firefighter)
+
         /*this.dailySalesChart.options = {
           lineSmooth: this.$chartist.Interpolation.cardinal({
             tension: 0
@@ -500,7 +720,7 @@
     created(){
       console.log('entrei aqui')
       this.fetchAllInfo()
-      this.timer = setInterval(this.fetchAllInfo, 5000)
+      this.timer = setInterval(this.fetchAllInfo, 10000)
     }
   }
 </script>

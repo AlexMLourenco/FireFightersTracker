@@ -12,6 +12,10 @@
                 <MglPopup>
                   <VCard>
                   <p class="category d-inline-flex font-weight-light">
+                  Firefighter {{firefighter.id}}
+                  </p>
+                  <p></p>
+                  <p class="category d-inline-flex font-weight-light">
                   GPS Location
                   </p>
                   <div>Longitude {{firefighter.gps.gps_tag_long}} </div>
@@ -155,6 +159,7 @@
           this.firefighters = res.data
           this.firefighters.forEach( firefighter => firefighter.gps.coordinates = [firefighter.gps.gps_tag_long,firefighter.gps.gps_tag_lat])
           // console.log('depois', this.firefighters)
+          console.log(this.firefighters)
         }catch(error){
           console.log(error)
         }   

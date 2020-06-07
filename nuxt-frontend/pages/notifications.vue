@@ -79,6 +79,7 @@
         try{
           const res = await axios.get(this.getUrl() + '/alarms/all')
           this.notifications = res.data
+          console.log(this.notifications)
           // console.log(this.notifications)
         }catch(error){
           console.log(error)
