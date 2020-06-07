@@ -312,9 +312,9 @@ public class ApiController {
         JSONObject jsonObject = new JSONObject(message);
         Gson gson = new Gson();
         FighterGPS t = gson.fromJson(jsonObject.toString(), FighterGPS.class);
-        System.out.println("Received Messasge: " + t.getDate());
-        System.out.println("date: " + String.format ("%.1f", Double.parseDouble(t.getDate())));
-        t.setDate(String.format ("%.1f", Double.parseDouble(t.getDate())));
+        //System.out.println("Received Messasge: " + t.getDate());
+        //System.out.println("date: " + String.format ("%d", (int)Double.parseDouble(t.getDate())));
+        t.setDate(String.format ("%d", (int)Double.parseDouble(t.getDate())));
         repositorygps.save(t);
 
     }
@@ -325,8 +325,8 @@ public class ApiController {
         JSONObject jsonObject = new JSONObject(message);
         Gson gson = new Gson();
         FighterHR t = gson.fromJson(jsonObject.toString(), FighterHR.class);
-        t.setDate(String.format ("%.1f", Double.parseDouble(t.getDate())));
-        
+        t.setDate(String.format ("%d", (int)Double.parseDouble(t.getDate())));
+        t.setHR(String.format ("%.1f",Double.parseDouble(t.getHr())));
         repositoryhr.save(t);
     }
  
@@ -336,7 +336,7 @@ public class ApiController {
         JSONObject jsonObject = new JSONObject(message);
         Gson gson = new Gson();
         FighterENV t = gson.fromJson(jsonObject.toString(), FighterENV.class);
-        t.setDate(String.format ("%.1f", Double.parseDouble(t.getDate())));
+        t.setDate(String.format ("%d", (int)Double.parseDouble(t.getDate())));
         
         repositoryenv.save(t);   
     }
