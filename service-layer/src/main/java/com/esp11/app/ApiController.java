@@ -158,6 +158,7 @@ public class ApiController {
                 if (Integer.parseInt(last.getCo()) >= 25){
                     a.setCo("true");
                     sendBD = true;
+                    a.setDate(last.getDate());
                 }
             }
             if(list2.size() > 0){
@@ -165,6 +166,7 @@ public class ApiController {
                 if (Double.parseDouble(last2.getHr()) >= 100.0){
                     a.setHr("true");
                     sendBD = true;
+                    a.setDate(last2.getDate());
                 }
      
             }
@@ -278,6 +280,23 @@ public class ApiController {
     public String dashBoard() throws JsonProcessingException {
   
         ObjectMapper mapper = new ObjectMapper();
+        List<String> actual = new ArrayList<>();
+        for (int i = 0; i < array.length;i++) {
+            
+            List<FighterENV> env = repositoryenv.findByName(array[i]);
+            List<FighterHR> hr = repositoryhr.findByName(array[i]);
+            HashMap<String, Object> board = new HashMap<String, Object>();
+            
+            board.put("env", env);
+            board.put("hr", hr);
+            board.put("id", array[i]);
+            actual.add(mapper.writeValueAsString(board));
+        }
+        Object[] arr2 = actual.toArray();
+        String send = Arrays.toString(arr2); 
+        
+        return send;
+        /*
         Iterable<FighterENV> ff = repositoryenv.findAll();//.forEach(x -> log.info(x.toString()));
         FighterENV[] fs = Iterables.toArray(ff, FighterENV.class);
         
@@ -289,6 +308,7 @@ public class ApiController {
         board.put("env", fs);
         board.put("hr", fs2);
         return mapper.writeValueAsString(board);
+*/
     }
     
     @KafkaListener(topics = "esp11_gps", groupId = "team")
@@ -297,7 +317,9 @@ public class ApiController {
         JSONObject jsonObject = new JSONObject(message);
         Gson gson = new Gson();
         FighterGPS t = gson.fromJson(jsonObject.toString(), FighterGPS.class);
-        t.setDate(String.format ("%.1f", Double.parseDouble(t.getDate())));
+        //System.out.println("Received Messasge: " + t.getDate());
+        //System.out.println("date: " + String.format ("%d", (int)Double.parseDouble(t.getDate())));
+        t.setDate(String.format ("%d", (int)Double.parseDouble(t.getDate())));
         repositorygps.save(t);
 
     }
@@ -308,8 +330,8 @@ public class ApiController {
         JSONObject jsonObject = new JSONObject(message);
         Gson gson = new Gson();
         FighterHR t = gson.fromJson(jsonObject.toString(), FighterHR.class);
-        t.setDate(String.format ("%.1f", Double.parseDouble(t.getDate())));
-        
+        t.setDate(String.format ("%d", (int)Double.parseDouble(t.getDate())));
+        t.setHR(String.format ("%.1f",Double.parseDouble(t.getHr())));
         repositoryhr.save(t);
     }
  
@@ -319,7 +341,7 @@ public class ApiController {
         JSONObject jsonObject = new JSONObject(message);
         Gson gson = new Gson();
         FighterENV t = gson.fromJson(jsonObject.toString(), FighterENV.class);
-        t.setDate(String.format ("%.1f", Double.parseDouble(t.getDate())));
+        t.setDate(String.format ("%d", (int)Double.parseDouble(t.getDate())));
         
         repositoryenv.save(t);   
     }
