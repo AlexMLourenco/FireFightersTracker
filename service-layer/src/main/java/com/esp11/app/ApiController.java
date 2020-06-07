@@ -155,7 +155,7 @@ public class ApiController {
                 if (Integer.parseInt(last.getCo()) >= 25){
                     a.setCo("true");
                     sendBD = true;
-                    a.setDate(last.getDate());
+                    //a.setDate(last.getDate());
                 }
             }
             if(list2.size() > 0){
@@ -163,7 +163,7 @@ public class ApiController {
                 if (Double.parseDouble(last2.getHr()) >= 100.0){
                     a.setHr("true");
                     sendBD = true;
-                    a.setDate(last2.getDate());
+                    //a.setDate(last2.getDate());
                 }
      
             }
@@ -326,7 +326,7 @@ public class ApiController {
         Gson gson = new Gson();
         FighterHR t = gson.fromJson(jsonObject.toString(), FighterHR.class);
         t.setDate(String.format ("%d", (int)Double.parseDouble(t.getDate())));
-        t.setHR(String.format ("%.1f",Double.parseDouble(t.getHr())));
+        //t.setHR(String.format ("%.1f",Double.parseDouble(t.getHr())).replace(',', '.'));
         repositoryhr.save(t);
     }
  
