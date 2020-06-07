@@ -1,10 +1,21 @@
 <template>
+
   <v-container
-    fill-height
+    
     fluid
     grid-list-xl
   >
+    <v-row>
+      <v-select
+          :items="firefighters"
+          filled
+          label="Current FireFighter"
+          @input="changeFirefighter"
+      ></v-select>
+    </v-row>
+
     <v-layout wrap>
+
       <v-flex
         md12
         sm12
@@ -220,6 +231,7 @@
 </template>
 
 <script>
+  import axios from "axios"
   import materialCard from '~/components/material/AppCard'
   import materialChartCard from '~/components/material/AppChartCard'
   import materialStatsCard from '~/components/material/AppStatsCard'
@@ -371,6 +383,30 @@
     methods: {
       complete (index) {
         this.list[index] = !this.list[index]
+      },
+      async fetchAllInfo(){
+        try{
+          const res_dash = await axios.get(this.getUrl() + '/dashboard')
+          const res_fighters = await axios.get(this.getUrl() + '/fighters/all')
+          this.firefighters = res_fighters.data
+          //Separa os bombeiros 
+          this.firefighters.forEach( firefighter => firefighter.gps.coordinates = [firefighter.gps.gps_tag_long,firefighter.gps.gps_tag_lat])
+
+          this.info = res_dash.data
+
+        }catch(error){
+          console.log(error)
+        }   
+      },
+      changeFirefighter ( ) {
+        console.log('mudei estado')
+        this.message = event.target.value;
+        console.log(this.message)
+        this.$emit('changeFirefighter', this.message)
+
+      },
+      getUrl(){
+        return "http://localhost:8080"
       }
     },
     mounted() {
@@ -402,6 +438,22 @@
           }
         };*/
       });
+    },
+    created(){
+      this.fetchAllInfo();
+      this.timer = setInterval(this.fetchAllInfo, 3000)
     }
   }
 </script>
+
+<style scoped>
+  /* .v-container {
+    padding-top:10px;
+  }
+  .v-select {
+    position: absolute;
+    left: 10px;
+    top: 0px;
+
+  } */
+</style>

@@ -72,11 +72,11 @@ pprint.pprint(new)
 producer = KafkaProducer(value_serializer=lambda m: json.dumps(m).encode('ascii'))
 for item in new:
     if item['type'] == 'gps':
-        producer.send('gps', item)
+        producer.send('env_gps', item)
     elif item['type'] == 'env':
-        producer.send('env', item)
+        producer.send('esp11_env', item)
     elif item['type'] == 'hr':
-        producer.send('hr', item)
+        producer.send('env_hr', item)
     time.sleep(0.03)
 
 # # produce asynchronously

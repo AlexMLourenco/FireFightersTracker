@@ -160,9 +160,9 @@
         }   
       },
 
-
+      //Url service layer
       getUrl(){
-        return "http://192.168.160.103:11080"
+        return "http://localhost:8080"
       }
     },
     computed: {

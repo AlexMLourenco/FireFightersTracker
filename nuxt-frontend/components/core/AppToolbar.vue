@@ -19,6 +19,7 @@
           <v-icon>mdi-view-list</v-icon>
         </v-btn>
         {{ title }}
+
       </v-toolbar-title>
     </div>
 
@@ -110,7 +111,8 @@
       ],
       title: 'Dashboard',
       responsive: true,
-      responsiveInput: true
+      responsiveInput: true,
+      items: ['vr12','a1','a2']
     }),
     watch: {
       '$route' (val) {
@@ -142,7 +144,8 @@
           this.responsive = false
           this.responsiveInput = true
         }
-      },
+        },
+
       async logout() {
         await this.setUsername(null);
         this.$router.push({ path: '/' });

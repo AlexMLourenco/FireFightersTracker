@@ -16,10 +16,15 @@
             <div class="title font-weight-light mb-2">Notifications</div>
             <div class="category">
               List of notifications
-
             </div>
           </div>
-
+            <material-notification v-for="(notification,index) in notifications" :key="index"
+                  class="mb-3"
+                  color="warning"
+                  dismissible
+                >
+                  <strong>WARNING</strong> {{notification.fighter}} - {{notification.co}} - {{notification.hr}}
+            </material-notification>
           
         </material-card>
       </v-flex>
@@ -28,6 +33,7 @@
 </template>
 
 <script>
+  import axios from "axios"
   import materialCard from '~/components/material/AppCard'
   import materialNotification from '~/components/material/AppNotification'
 
@@ -50,7 +56,8 @@
       bottom: false,
       left: false,
       right: false,
-      snackbar: false
+      snackbar: false,
+      notifications: []
     }),
 
     methods: {
@@ -67,7 +74,23 @@
         this.color = this.colors[Math.floor(Math.random() * this.colors.length)]
 
         this.snackbar = true
+      },
+      async fetchAlarms(){
+        try{
+          const res = await axios.get(this.getUrl() + '/alarms/all')
+          this.notifications = res.data
+          // console.log(this.notifications)
+        }catch(error){
+          console.log(error)
+        }   
+      },
+      getUrl(){
+        return "http://localhost:8080"
       }
+    },
+    created(){
+      this.fetchAlarms();
+      this.timer = setInterval(this.fetchAlarms, 3000)
     }
   }
 </script>
