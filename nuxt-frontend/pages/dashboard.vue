@@ -4,14 +4,18 @@
     
     fluid
     grid-list-xl
+    @load="onDashboardLoad"
   >
     <v-row>
       <v-select
-          :items="firefighters"
+          :items="firefighters_ex"
           filled
           label="Current FireFighter"
+          v-model="selectedFirefighter"
           @input="changeFirefighter"
+
       ></v-select>
+      firefighter - {{firefighter}}
     </v-row>
 
     <v-layout wrap>
@@ -87,8 +91,8 @@
           color="green"
           type="Line"
         >
-          <h3 class="title font-weight-light">Controlled burn</h3>
-          <p class="category d-inline-flex font-weight-light">Last hour controlled burn</p>
+          <h3 class="title font-weight-light">Temperature</h3>
+          <p class="category d-inline-flex font-weight-light">Graph of temperature by time</p>
 
           <template slot="actions">
             <v-icon
@@ -111,9 +115,9 @@
           color="green"
           icon="mdi-chemical-weapon"
           title="CO"
-          value="22"
+          :value="firefighter.env.co"
           sub-icon="mdi-update"
-          sub-text="Last Hour"
+          sub-text="5 seconds ago"
         />
       </v-flex>
       <v-flex
@@ -122,17 +126,20 @@
         md6
         lg3
       >
+                <!-- :value="firefighter.env.temp" -->
+
         <material-stats-card
           color="orange"
           icon="mdi-temperature-celsius"
           title="Temperature"
-          value="19º"
           small-value="C"
+          :value="firefighter.env.temp"
           sub-icon="mdi-update"
           sub-icon-color="error"
-          sub-text="Last Hour"
+          sub-text="5 seconds ago"
           sub-text-color="text-primary"
         />
+        
       </v-flex>
       <v-flex
         sm6
@@ -142,12 +149,12 @@
       >
         <material-stats-card
           color="red"
-          icon="mdi-gauge"
-          title="Pressure"
-          value="75"
-          small-value="bar"
+          icon="mdi-heart-pulse"
+          title="Heart Rate"
+          :value="firefighter.hr.hr"
+          small-value="bpm"
           sub-icon="mdi-update"
-          sub-text="Last Hour"
+          sub-text="5 seconds ago"
         />
       </v-flex>
       <v-flex
@@ -160,10 +167,10 @@
           color="info"
           icon="mdi-water-percent"
           title="Humidity"
-          value="10"
+          :value="firefighter.env.hum"
           small-value="%"
           sub-icon="mdi-update"
-          sub-text="Last Hour"
+          sub-text="5 seconds ago"
         />
       </v-flex>
       <!-- <v-flex
@@ -377,13 +384,44 @@
           0: false,
           1: false,
           2: false
-        }
+        },
+        firefighters_ex: [
+          'vr12', 'a1', 'a2'
+        ],
+        selectedFirefighter: 'vr12',
+        loading:false,
+        firefighter:{ "id": "vr12", "gps": { "id": 51438, "date": "1557944700,0", "name": "vr12", "type": "gps", "gps_alt_tag": "1110", "gps_tag_lat": "40.06451668", "gps_tag_long": "-8.1615259", "gps_time_tag": "1110", "coordinates": [ "-8.1615259", "40.06451668" ] }, "env": { "id": 51444, "date": "1557944700,0", "name": "vr12", "type": "env", "co": "0", "temp": "28", "hgt": "-22", "no2": "0.9", "hum": "-1", "lum": "24", "battery": "101" }, "hr": { "id": 51493, "date": "1557944700,0", "name": "vr12", "type": "hr", "hr": "101.0217575" } }
+
       }
     },
     methods: {
       complete (index) {
         this.list[index] = !this.list[index]
       },
+      async onDashboardLoad(){
+        const firefighters = await this.getFirefighters();
+        this.firefighters = firefighters;
+        console.log('firefighters dashboard load', this.firefighters)
+        for (var f in this.firefighters){
+          console.log(this.firefighters[f].id === 'vr12')
+          console.log(this.firefighters[f])
+          if (this.firefighters[f].id === 'vr12'){
+            this.firefighter = this.firefighters[f]
+            console.log('firefighter == vr12', this.firefighters[f])
+          }
+        }
+      },
+      async getFirefighters(){
+        // console.log($this.store.actions.get_firefighters)
+        // const res = await this.$store.state.dispatch("get_firefighters")
+        try{
+          const res = await axios.get(this.getUrl() + '/fighters/all')
+          return res.data
+        }catch(error){
+          console.log(error)
+        }
+      }
+      ,
       async fetchAllInfo(){
         try{
           const res_dash = await axios.get(this.getUrl() + '/dashboard')
@@ -391,18 +429,33 @@
           this.firefighters = res_fighters.data
           //Separa os bombeiros 
           this.firefighters.forEach( firefighter => firefighter.gps.coordinates = [firefighter.gps.gps_tag_long,firefighter.gps.gps_tag_lat])
+          console.log(this.firefighters)
+          for (var f in this.firefighters){
+            if (this.firefighters[f].id === this.selectedFirefighter){
+              this.firefighter = this.firefighters[f]
+            }
+          }
 
+          //this.dataCompletedTasksChart.series = 
+          
           this.info = res_dash.data
+          console.log(this.info)
 
         }catch(error){
           console.log(error)
         }   
       },
-      changeFirefighter ( ) {
+      changeFirefighter() {
         console.log('mudei estado')
-        this.message = event.target.value;
-        console.log(this.message)
-        this.$emit('changeFirefighter', this.message)
+        console.log(this.selectedFirefighter)
+        // this.$emit('changeFirefighter', this.message)
+        for (var f in this.firefighters){
+            if (this.firefighters[f].id === this.selectedFirefighter){
+              this.firefighter = this.firefighters[f]
+            }
+        }
+        console.log(this.firefighter)
+        
 
       },
       getUrl(){
@@ -411,6 +464,11 @@
     },
     mounted() {
       this.$nextTick(() => {
+        // this.$nuxt.$loading.start()
+
+        // setTimeout(() => this.$nuxt.$loading.finish(), 500)
+        this.onDashboardLoad()
+        console.log('onload firefighter', this.firefighter)
         /*this.dailySalesChart.options = {
           lineSmooth: this.$chartist.Interpolation.cardinal({
             tension: 0
@@ -440,8 +498,9 @@
       });
     },
     created(){
-      this.fetchAllInfo();
-      this.timer = setInterval(this.fetchAllInfo, 3000)
+      console.log('entrei aqui')
+      this.fetchAllInfo()
+      this.timer = setInterval(this.fetchAllInfo, 5000)
     }
   }
 </script>

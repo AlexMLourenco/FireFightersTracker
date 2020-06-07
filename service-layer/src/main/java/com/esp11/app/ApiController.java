@@ -272,7 +272,7 @@ public class ApiController {
         return strr;
         
     }
-    
+
     @CrossOrigin(origins = origin_dev)
     @GetMapping("/dashboard")
     public String dashBoard() throws JsonProcessingException {
@@ -297,8 +297,6 @@ public class ApiController {
         JSONObject jsonObject = new JSONObject(message);
         Gson gson = new Gson();
         FighterGPS t = gson.fromJson(jsonObject.toString(), FighterGPS.class);
-        System.out.println("Received Messasge: " + t.getDate());
-        System.out.println("date: " + String.format ("%.1f", Double.parseDouble(t.getDate())));
         t.setDate(String.format ("%.1f", Double.parseDouble(t.getDate())));
         repositorygps.save(t);
 

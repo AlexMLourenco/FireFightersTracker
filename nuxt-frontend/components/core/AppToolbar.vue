@@ -145,7 +145,6 @@
           this.responsiveInput = true
         }
         },
-
       async logout() {
         await this.setUsername(null);
         this.$router.push({ path: '/' });
