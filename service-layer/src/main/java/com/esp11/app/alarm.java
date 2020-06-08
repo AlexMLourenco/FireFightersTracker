@@ -22,6 +22,7 @@ public class alarm {
     private String type;
     private String state;
     private String date;
+    private String value;
 
     private String fighter;
     
@@ -36,6 +37,12 @@ public class alarm {
     }
     public void setId(Integer id){
         this.id = id;
+    }
+    public void setValue(String value){
+        this.value = value;
+    }
+    public String getValue(){
+        return value;
     }
     public void setDate(String date){
         this.date = date;

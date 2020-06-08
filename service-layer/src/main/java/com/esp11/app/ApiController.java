@@ -179,6 +179,7 @@ public class ApiController {
                 a.setType("CO");
                 a.setDate(last.getDate());
                 a.setState("false");
+                a.setValue(last.getCo());
                 if (Integer.parseInt(last.getCo()) >= 25){
  
                     a.setState("true");
@@ -194,6 +195,7 @@ public class ApiController {
                 a.setType("CO");
                 a.setDate(last2.getDate());
                 a.setState("false");
+                a.setValue(last2.getHr());
                 if (Double.parseDouble(last2.getHr()) >= 100.0){
                    a.setState("true");
                 }
