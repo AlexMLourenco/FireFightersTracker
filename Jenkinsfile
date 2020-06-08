@@ -31,8 +31,8 @@ pipeline {
             steps {
 		        parallel(
                     Service_Layer: {
-                                //Before we stop the container and build the image we remove the image esp11-service-layer by running this scritp
-				            sshagent(credentials: ['esp11_ssh_credentials']){
+                                //Before the build, the container the image esp11-service-layer are removed by running docker_clear.sh script
+				                sshagent(credentials: ['esp11_ssh_credentials']){
                                     sh "ssh -o 'StrictHostKeyChecking=no' -l esp11 192.168.160.103 sh docker_clear.sh esp11-service-layer"
                                 }
                                 sh "docker rmi -f esp11-service-layer"
@@ -41,8 +41,8 @@ pipeline {
                                 sh "docker push 192.168.160.99:5000/esp11-service-layer"
                     },
                     Frontend: {
-                                //Before the build the container is stopped and removed and the image esp11-frontend by running this scritp
-                            sshagent(credentials: ['esp11_ssh_credentials']){
+                                //Before the build, the container and the image esp11-frontend are removed by running docker_clear.sh script
+                                sshagent(credentials: ['esp11_ssh_credentials']){
                                     sh "ssh -o 'StrictHostKeyChecking=no' -l esp11 192.168.160.103 sh docker_clear.sh esp11-frontend"
                                 }
                                 sh "docker rmi -f esp11-frontend"
