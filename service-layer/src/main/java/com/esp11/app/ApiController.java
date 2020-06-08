@@ -310,7 +310,7 @@ public class ApiController {
         
     }
 
-    @CrossOrigin(origins = origin_dev)
+    @CrossOrigin(origins = origin_production)
     @GetMapping("/dashboard")
     public String dashBoard() throws JsonProcessingException {
   
