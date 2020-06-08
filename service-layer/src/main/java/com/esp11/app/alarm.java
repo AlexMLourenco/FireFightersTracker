@@ -19,9 +19,10 @@ public class alarm {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
-    private String co;
-    private String hr;
+    private String type;
+    private String state;
     private String date;
+    private String value;
 
     private String fighter;
     
@@ -30,12 +31,18 @@ public class alarm {
     }
     public alarm(String fighter){
         this.fighter = fighter;
-        this.co = "false";
-        this.hr = "false";
+        this.state = "false";
+        
         
     }
     public void setId(Integer id){
         this.id = id;
+    }
+    public void setValue(String value){
+        this.value = value;
+    }
+    public String getValue(){
+        return value;
     }
     public void setDate(String date){
         this.date = date;
@@ -47,11 +54,11 @@ public class alarm {
         return date;
     }
     
-    public void setCo(String co){
-        this.co = co;
+    public void setState(String state){
+        this.state = state;
     }
-    public String getCo(){
-        return co;
+    public String getState(){
+        return state;
     }
     public void setFighter(String fighter){
         this.fighter = fighter;
@@ -59,11 +66,11 @@ public class alarm {
     public String getFighter(){
         return fighter;
     }
-    public void setHr(String hr){
-        this.hr = hr;
+    public void setType(String type){
+        this.type = type;
     }
-    public String getHr(){
-        return hr;
+    public String getType(){
+        return type;
     }
     
 }
