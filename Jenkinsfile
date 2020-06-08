@@ -29,12 +29,18 @@ pipeline {
             steps {
 		        parallel(
                     Service_Layer: {
+				                sshagent(credentials: ['esp11_ssh_credentials']){
+                                    sh "ssh -o 'StrictHostKeyChecking=no' -l esp11 192.168.160.103 ./docker_clear.sh esp11-service-layer"
+                                }
                                 sh "docker rmi -f esp11-service-layer"
                                 sh "docker build --no-cache -t esp11-service-layer service-layer"
                                 sh "docker tag esp11-service-layer 192.168.160.99:5000/esp11-service-layer"
                                 sh "docker push 192.168.160.99:5000/esp11-service-layer"
                     },
                     Frontend: {
+                                sshagent(credentials: ['esp11_ssh_credentials']){
+                                    sh "ssh -o 'StrictHostKeyChecking=no' -l esp11 192.168.160.103 ./docker_clear.sh esp11-frontend"
+                                }
                                 sh "docker rmi -f esp11-frontend"
                                 sh "docker build --no-cache -t esp11-frontend nuxt-frontend"
                                 sh "docker tag esp11-frontend 192.168.160.99:5000/esp11-frontend"
