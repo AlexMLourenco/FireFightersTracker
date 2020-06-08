@@ -69,15 +69,15 @@ gps = firefighter['vr12']['gps'] + firefighter['vr12']['env'] + firefighter['vr1
 new = sorted(gps, key = lambda i: i['date']) 
 pprint.pprint(new)
 
-producer = KafkaProducer(value_serializer=lambda m: json.dumps(m).encode('ascii'))
+producer = KafkaProducer(bootstrap_servers=['localhost:9092'],value_serializer=lambda m: json.dumps(m).encode('ascii'))
 for item in new:
     if item['type'] == 'gps':
-        producer.send('gps', item)
+        producer.send('esp11_gps', item)
     elif item['type'] == 'env':
-        producer.send('env', item)
+        producer.send('esp11_env', item)
     elif item['type'] == 'hr':
-        producer.send('hr', item)
-    time.sleep(0.03)
+        producer.send('esp11_hr', item)
+    time.sleep(0.08)
 
 # # produce asynchronously
 # for _ in range(100):

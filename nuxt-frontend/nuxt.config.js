@@ -2,6 +2,10 @@ import VuetifyLoaderPlugin from 'vuetify-loader/lib/plugin'
 import pkg from './package'
 export default {
   mode: 'universal',
+  server: { 
+    port: 3000,   
+    host: 'localhost'
+  }, 
 
   /*
   ** Headers of the page

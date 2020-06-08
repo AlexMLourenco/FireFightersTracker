@@ -96,16 +96,26 @@ pprint.pprint(new)
 #         print('Produced information to topic firefighters')
 #         time.sleep(1)
 
-producer = KafkaProducer(value_serializer=lambda m: json.dumps(m).encode('ascii'))
+#producer = KafkaProducer(bootstrap_servers=['192.168.160.103:9092'],value_serializer=lambda m: json.dumps(m).encode('ascii'))
+producer = KafkaProducer(bootstrap_servers=['localhost:9092'],value_serializer=lambda m: json.dumps(m).encode('ascii'))
 for item in new:
-    if item['type'] == 'gps':
-        producer.send('gps', item)
-    elif item['type'] == 'env':
-        producer.send('env', item)
-    elif item['type'] == 'hr':
-        producer.send('hr', item)
-    pprint.pprint(item)
-    time.sleep(0.04)
+   if item['type'] == 'gps':
+       producer.send('esp11_gps', item)
+   elif item['type'] == 'env':
+       producer.send('esp11_env', item)
+   elif item['type'] == 'hr':
+       producer.send('esp11_hr', item)
+   pprint.pprint(item)
+   time.sleep(0.04)
+# for item in new:
+#     if item['type'] == 'gps':
+#         producer.send('gps', item)
+#     elif item['type'] == 'env':
+#         producer.send('env', item)
+#     elif item['type'] == 'hr':
+#         producer.send('hr', item)
+#     pprint.pprint(item)
+#     time.sleep(0.04)
 
 # # produce asynchronously
 # for _ in range(100):

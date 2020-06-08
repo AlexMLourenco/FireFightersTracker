@@ -9,7 +9,8 @@ WORKDIR /usr/src/app
 # where available (npm@5+)
 COPY package*.json ./
 
-RUN npm install
+
+RUN npm install node-sass --nodedir=/usr/local && npm install
 
 # Bundle app source
 COPY . .
@@ -19,5 +20,5 @@ EXPOSE 3000
 
 # Start command
 # .. serving with hot reload
-#CMD [ "npm", "run", "dev"]
-CMD npm run build && npm run start
+CMD [ "npm", "run", "dev"]
+#CMD npm run build && npm run start

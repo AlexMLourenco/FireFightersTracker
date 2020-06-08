@@ -33,8 +33,8 @@ public class KafkaConsumerConfig {
     public ConsumerFactory<String, String> ConsumerFactory() {
         Map<String, Object> props = new HashMap<>();
         props.put(
-          ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, 
-         "192.168.160.103:9092");
+          ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+         //"192.168.160.103:9092");
         props.put(
           ConsumerConfig.GROUP_ID_CONFIG, 
           "team");
@@ -44,9 +44,13 @@ public class KafkaConsumerConfig {
         props.put(
           ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, 
           StringDeserializer.class);
+        // props.put(
+        //   ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         return new DefaultKafkaConsumerFactory<>(
              props
         );
+
+
     }
  
     @Bean

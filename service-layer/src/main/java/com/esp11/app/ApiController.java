@@ -54,7 +54,8 @@ public class ApiController {
     private RepositoryENV repositoryenv;
     @Autowired
     private RepositoryHR repositoryhr;
-    
+    @Autowired
+    private RepositoryAlarm repositoryalarms;
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
     
@@ -62,13 +63,16 @@ public class ApiController {
 
     //private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
     public String str = "";
+    public final String origin_production = "http://192.168.160.103:11300";
+    public final String origin_dev = "http://localhost:3000";
+
     String[] array = {"a1","a2","vr12"};
     @GetMapping("/version")
     public String version() throws JsonProcessingException {
         return "1.0";
     }
     
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = origin_dev)
     @GetMapping("/fighters/gps")
     public String fightersLocation() throws JsonProcessingException {
         /*
@@ -111,7 +115,7 @@ public class ApiController {
         
         return strr;
     }
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = origin_dev)
     @GetMapping("/fighters/env")
     public String fightersEnvironment() throws JsonProcessingException {
        
@@ -125,6 +129,7 @@ public class ApiController {
             if(list.size() > 0){
                 FighterENV last = list.get(list.size() - 1); 
                 actual.add(mapper.writeValueAsString(last));
+                
             }
             
         }
@@ -134,9 +139,9 @@ public class ApiController {
         
         return strr;
     }
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "http://192.168.160.103:11300")
     @GetMapping("/fighters/hr")
-    public String fightersRate() throws JsonProcessingException {
+    public String fightersHeartRate() throws JsonProcessingException {
        
         ObjectMapper mapper = new ObjectMapper();
         List<String> actual = new ArrayList<String>();
@@ -148,6 +153,7 @@ public class ApiController {
             if(list.size() > 0){
                 FighterHR last = list.get(list.size() - 1); 
                 actual.add(mapper.writeValueAsString(last));
+                
             }
             
         }
@@ -157,7 +163,74 @@ public class ApiController {
         
         return strr;
     }
-    @CrossOrigin(origins = "http://localhost:3000")
+    
+    @CrossOrigin(origins = origin_dev)
+    @GetMapping("/alarms/last")
+    public String alarmsLast() throws JsonProcessingException {
+       
+        ObjectMapper mapper = new ObjectMapper();
+        List<String> actual = new ArrayList<String>();
+        
+        for (int i = 0; i < array.length;i++) {
+            
+            List<FighterENV> list = repositoryenv.findByName(array[i]);
+            List<FighterHR> list2 = repositoryhr.findByName(array[i]);
+            alarm a = new alarm(array[i]);
+            a.setType("CO");
+            a.setState("false");
+            alarm b = new alarm(array[i]);
+            b.setType("HR");
+            b.setState("false");
+            if(list.size() > 0){
+                FighterENV last = list.get(list.size() - 1);
+                
+                a.setDate(last.getDate());
+                
+                a.setValue(last.getCo());
+                if (Integer.parseInt(last.getCo()) >= 25){
+ 
+                    a.setState("true");
+                   
+                }
+                
+                
+               
+            }
+            actual.add(mapper.writeValueAsString(a));
+            if(list2.size() > 0){
+                FighterHR last2 = list2.get(list2.size() - 1);
+                
+                b.setDate(last2.getDate());
+                
+                b.setValue(last2.getHr());
+                if (Double.parseDouble(last2.getHr()) >= 100.0){
+                   b.setState("true");
+                }
+                
+            }    
+            actual.add(mapper.writeValueAsString(b));
+        }
+       
+        Object[] array = actual.toArray();
+        String strr = Arrays.toString(array); 
+        
+        return strr;
+    }
+    @CrossOrigin(origins = origin_dev)
+    @GetMapping("/alarms/all")
+    public String alarmsAll() throws JsonProcessingException {
+       
+        ObjectMapper mapper = new ObjectMapper();
+        Iterable<alarm> ff = repositoryalarms.findAll();
+        alarm[] fs = Iterables.toArray(ff, alarm.class);
+        String[] alarm = new String[fs.length];
+        for(int i =0; i < fs.length;i++){
+            alarm[i] = mapper.writeValueAsString(fs[i]);
+        }
+        String strr = Arrays.toString(alarm);
+        return strr;
+    }
+    @CrossOrigin(origins = origin_dev)
     @GetMapping("/fighters/all")
     public String fightersINFO() throws JsonProcessingException {
        
@@ -225,7 +298,6 @@ public class ApiController {
     
     @GetMapping("/fighters/envInfo")
     public String fightersENV() throws JsonProcessingException {
-    
         ObjectMapper mapper = new ObjectMapper();
         Iterable<FighterENV> ff = repositoryenv.findAll();//.forEach(x -> log.info(x.toString()));
         FighterENV[] fs = Iterables.toArray(ff, FighterENV.class);
@@ -235,6 +307,65 @@ public class ApiController {
         }
         String strr = Arrays.toString(env);
         return strr;
+        
+    }
+
+    @CrossOrigin(origins = origin_dev)
+    @GetMapping("/dashboard")
+    public String dashBoard() throws JsonProcessingException {
+  
+        ObjectMapper mapper = new ObjectMapper();
+        List<String> actual = new ArrayList<>();
+        for (int i = 0; i < array.length;i++) {
+            
+            List<FighterENV> env = repositoryenv.findByName(array[i]);
+            FighterENV[] arrayEnv = new FighterENV[env.size()];
+            arrayEnv = env.toArray(arrayEnv);
+            List<FighterENV> tmpE = new ArrayList<>();
+            int tmp = 0;
+            for(int j = 0; j < env.size()-1;j++){
+                int date = Integer.parseInt(arrayEnv[j].getDate());
+                if(date >= tmp){
+                    tmp = date + 300;
+                    tmpE.add(arrayEnv[j]);
+                }
+            }
+            List<FighterHR> hr = repositoryhr.findByName(array[i]);
+            FighterHR[] arrayHr = new FighterHR[hr.size()];
+            arrayHr = hr.toArray(arrayHr);
+            List<FighterHR> tmpH = new ArrayList<>();
+            tmp = 0;
+            for(int j = 0; j < hr.size()-1;j++){
+                int date = Integer.parseInt(arrayHr[j].getDate());
+                if(date >= tmp){
+                    tmp = date + 300;
+                    tmpH.add(arrayHr[j]);
+                }
+            }
+            HashMap<String, Object> board = new HashMap<String, Object>();
+            
+            board.put("env", tmpE);
+            board.put("hr", tmpH);
+            board.put("id", array[i]);
+            actual.add(mapper.writeValueAsString(board));
+        }
+        Object[] arr2 = actual.toArray();
+        String send = Arrays.toString(arr2); 
+        
+        return send;
+        /*
+        Iterable<FighterENV> ff = repositoryenv.findAll();//.forEach(x -> log.info(x.toString()));
+        FighterENV[] fs = Iterables.toArray(ff, FighterENV.class);
+        
+        
+        Iterable<FighterHR> f = repositoryhr.findAll();//.forEach(x -> log.info(x.toString()));
+        FighterHR[] fs2 = Iterables.toArray(f, FighterHR.class);
+        
+        HashMap<String, Object> board = new HashMap<String, Object>();
+        board.put("env", fs);
+        board.put("hr", fs2);
+        return mapper.writeValueAsString(board);
+*/
     }
     
     @KafkaListener(topics = "esp11_gps", groupId = "team")
@@ -243,8 +374,9 @@ public class ApiController {
         JSONObject jsonObject = new JSONObject(message);
         Gson gson = new Gson();
         FighterGPS t = gson.fromJson(jsonObject.toString(), FighterGPS.class);
-        System.out.println("Received Messasge: " + jsonObject.toString());
-        
+        //System.out.println("Received Messasge: " + t.getDate());
+        //System.out.println("date: " + String.format ("%d", (int)Double.parseDouble(t.getDate())));
+        t.setDate(String.format ("%d", (int)Double.parseDouble(t.getDate())));
         repositorygps.save(t);
 
     }
@@ -255,8 +387,8 @@ public class ApiController {
         JSONObject jsonObject = new JSONObject(message);
         Gson gson = new Gson();
         FighterHR t = gson.fromJson(jsonObject.toString(), FighterHR.class);
-        System.out.println("Received Messasge: " + jsonObject.toString());
-        
+        t.setDate(String.format ("%d", (int)Double.parseDouble(t.getDate())));
+        //t.setHR(String.format ("%.1f",Double.parseDouble(t.getHr())).replace(',', '.'));
         repositoryhr.save(t);
     }
  
@@ -266,7 +398,7 @@ public class ApiController {
         JSONObject jsonObject = new JSONObject(message);
         Gson gson = new Gson();
         FighterENV t = gson.fromJson(jsonObject.toString(), FighterENV.class);
-        System.out.println("Received Messasge: " + jsonObject.toString());
+        t.setDate(String.format ("%d", (int)Double.parseDouble(t.getDate())));
         
         repositoryenv.save(t);   
     }
