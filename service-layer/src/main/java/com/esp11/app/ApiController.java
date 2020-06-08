@@ -175,35 +175,40 @@ public class ApiController {
             
             List<FighterENV> list = repositoryenv.findByName(array[i]);
             List<FighterHR> list2 = repositoryhr.findByName(array[i]);
-            
+            alarm a = new alarm(array[i]);
+            a.setType("CO");
+            a.setState("false");
+            alarm b = new alarm(array[i]);
+            b.setType("HR");
+            b.setState("false");
             if(list.size() > 0){
                 FighterENV last = list.get(list.size() - 1);
-                alarm a = new alarm(array[i]);
-                a.setType("CO");
+                
                 a.setDate(last.getDate());
-                a.setState("false");
+                
                 a.setValue(last.getCo());
                 if (Integer.parseInt(last.getCo()) >= 25){
  
                     a.setState("true");
                    
                 }
-                actual.add(mapper.writeValueAsString(a));
+                
                 
                
             }
+            actual.add(mapper.writeValueAsString(a));
             if(list2.size() > 0){
                 FighterHR last2 = list2.get(list2.size() - 1);
-                alarm a = new alarm(array[i]);
-                a.setType("HR");
-                a.setDate(last2.getDate());
-                a.setState("false");
-                a.setValue(last2.getHr());
+                
+                b.setDate(last2.getDate());
+                
+                b.setValue(last2.getHr());
                 if (Double.parseDouble(last2.getHr()) >= 100.0){
-                   a.setState("true");
+                   b.setState("true");
                 }
-                actual.add(mapper.writeValueAsString(a));
-            }           
+                
+            }    
+            actual.add(mapper.writeValueAsString(b));
         }
        
         Object[] array = actual.toArray();
