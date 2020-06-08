@@ -31,7 +31,7 @@ pipeline {
             steps {
 		        parallel(
                     Service_Layer: {
-                                //Before the build, the container the image esp11-service-layer are removed by running docker_clear.sh script
+                                //Before the build, the container the image esp11-service-layer are removed in runtime by running docker_clear.sh script
 				                sshagent(credentials: ['esp11_ssh_credentials']){
                                     sh "ssh -o 'StrictHostKeyChecking=no' -l esp11 192.168.160.103 sh docker_clear.sh esp11-service-layer"
                                 }
@@ -41,7 +41,7 @@ pipeline {
                                 sh "docker push 192.168.160.99:5000/esp11-service-layer"
                     },
                     Frontend: {
-                                //Before the build, the container and the image esp11-frontend are removed by running docker_clear.sh script
+                                //Before the build, the container and the image esp11-frontend are removed in runtime by running docker_clear.sh script
                                 sshagent(credentials: ['esp11_ssh_credentials']){
                                     sh "ssh -o 'StrictHostKeyChecking=no' -l esp11 192.168.160.103 sh docker_clear.sh esp11-frontend"
                                 }
