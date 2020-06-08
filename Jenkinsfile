@@ -2,6 +2,7 @@ pipeline {
     agent any 
     parameters {
         choice(choices: 'yes\nno', description: 'Are you sure you want to execute this test?', name: 'run_test_only')
+        //e-mail feature -> not working
         //string(defaultValue: "lhsantos@ua.pt", description: 'email for notifications', name: 'notification_email')
     }
     stages {
@@ -30,6 +31,7 @@ pipeline {
             steps {
 		        parallel(
                     Service_Layer: {
+                                //Before we stop the container and build the image we remove the image esp11-service-layer by running this scritp
 				                sshagent(credentials: ['esp11_ssh_credentials']){
                                     sh "ssh -o 'StrictHostKeyChecking=no' -l esp11 192.168.160.103 sh docker_clear.sh esp11-service-layer"
                                 }
@@ -39,6 +41,7 @@ pipeline {
                                 sh "docker push 192.168.160.99:5000/esp11-service-layer"
                     },
                     Frontend: {
+                                //Before the build the container is stopped and removed and the image esp11-frontend by running this scritp
                                 sshagent(credentials: ['esp11_ssh_credentials']){
                                     sh "ssh -o 'StrictHostKeyChecking=no' -l esp11 192.168.160.103 sh docker_clear.sh esp11-frontend"
                                 }
@@ -57,13 +60,11 @@ pipeline {
                     parallel(
                         Service_layer:{
                             sshagent(credentials: ['esp11_ssh_credentials']){
-                                //sh "ssh -o 'StrictHostKeyChecking=no' -l esp11 192.168.160.103 docker rm -f esp11-service-layer"
                                 sh "ssh -o 'StrictHostKeyChecking=no' -l esp11 192.168.160.103 docker run -d -p 11080:8080 --name esp11-service-layer 192.168.160.99:5000/esp11-service-layer"
                             }
                         },
                         Frontend:{
                             sshagent(credentials: ['esp11_ssh_credentials']){
-                                //sh "ssh -o 'StrictHostKeyChecking=no' -l esp11 192.168.160.103 docker rm -f esp11-frontend"
                                 sh "ssh -o 'StrictHostKeyChecking=no' -l esp11 192.168.160.103 docker run -d -p 11300:3000 --name esp11-frontend 192.168.160.99:5000/esp11-frontend"
                             }
                         }
@@ -71,6 +72,7 @@ pipeline {
             }
         }
     }
+    // not working - sending email feature
     // post {
     //     success {
     //         echo "Test succeeded"
