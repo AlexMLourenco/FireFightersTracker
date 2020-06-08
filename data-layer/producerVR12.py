@@ -69,7 +69,7 @@ gps = firefighter['vr12']['gps'] + firefighter['vr12']['env'] + firefighter['vr1
 new = sorted(gps, key = lambda i: i['date']) 
 pprint.pprint(new)
 
-producer = KafkaProducer(bootstrap_servers=['localhost:9092'],value_serializer=lambda m: json.dumps(m).encode('ascii'))
+producer = KafkaProducer(bootstrap_servers=['192.168.160.103:9092'],value_serializer=lambda m: json.dumps(m).encode('ascii'))
 for item in new:
     if item['type'] == 'gps':
         producer.send('esp11_gps', item)

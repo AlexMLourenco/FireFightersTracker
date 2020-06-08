@@ -167,7 +167,7 @@
 
       //Url service layer
       getUrl(){
-        return "http://localhost:8080"
+        return "http://192.168.160.103:11080"
       }
     },
     computed: {

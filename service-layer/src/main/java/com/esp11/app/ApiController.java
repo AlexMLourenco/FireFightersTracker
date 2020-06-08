@@ -72,7 +72,7 @@ public class ApiController {
         return "1.0";
     }
     
-    @CrossOrigin(origins = origin_dev)
+    @CrossOrigin(origins = origin_production)
     @GetMapping("/fighters/gps")
     public String fightersLocation() throws JsonProcessingException {
         /*
@@ -115,7 +115,7 @@ public class ApiController {
         
         return strr;
     }
-    @CrossOrigin(origins = origin_dev)
+    @CrossOrigin(origins = origin_production)
     @GetMapping("/fighters/env")
     public String fightersEnvironment() throws JsonProcessingException {
        
@@ -139,7 +139,7 @@ public class ApiController {
         
         return strr;
     }
-    @CrossOrigin(origins = "http://192.168.160.103:11300")
+    @CrossOrigin(origins = origin_production)
     @GetMapping("/fighters/hr")
     public String fightersHeartRate() throws JsonProcessingException {
        
@@ -164,7 +164,7 @@ public class ApiController {
         return strr;
     }
     
-    @CrossOrigin(origins = origin_dev)
+    @CrossOrigin(origins = origin_production)
     @GetMapping("/alarms/last")
     public String alarmsLast() throws JsonProcessingException {
        
@@ -216,7 +216,7 @@ public class ApiController {
         
         return strr;
     }
-    @CrossOrigin(origins = origin_dev)
+    @CrossOrigin(origins = origin_production)
     @GetMapping("/alarms/all")
     public String alarmsAll() throws JsonProcessingException {
        
@@ -230,7 +230,7 @@ public class ApiController {
         String strr = Arrays.toString(alarm);
         return strr;
     }
-    @CrossOrigin(origins = origin_dev)
+    @CrossOrigin(origins = origin_production)
     @GetMapping("/fighters/all")
     public String fightersINFO() throws JsonProcessingException {
        
