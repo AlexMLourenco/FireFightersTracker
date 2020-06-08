@@ -126,6 +126,31 @@ public class ApiController {
             if(list.size() > 0){
                 FighterENV last = list.get(list.size() - 1); 
                 actual.add(mapper.writeValueAsString(last));
+                
+            }
+            
+        }
+       
+        Object[] array = actual.toArray();
+        String strr = Arrays.toString(array); 
+        
+        return strr;
+    }
+    @CrossOrigin(origins = "http://192.168.160.103:11300")
+    @GetMapping("/fighters/hr")
+    public String fightersHeartRate() throws JsonProcessingException {
+       
+        ObjectMapper mapper = new ObjectMapper();
+        List<String> actual = new ArrayList<String>();
+        
+        for (int i = 0; i < array.length;i++) {
+            
+            List<FighterHR> list = repositoryhr.findByName(array[i]);
+            
+            if(list.size() > 0){
+                FighterHR last = list.get(list.size() - 1); 
+                actual.add(mapper.writeValueAsString(last));
+                
             }
             
         }
@@ -142,35 +167,38 @@ public class ApiController {
        
         ObjectMapper mapper = new ObjectMapper();
         List<String> actual = new ArrayList<String>();
-        List<String> alarms = new ArrayList<String>();
-        boolean sendBD = false;
+        
         for (int i = 0; i < array.length;i++) {
             
             List<FighterENV> list = repositoryenv.findByName(array[i]);
             List<FighterHR> list2 = repositoryhr.findByName(array[i]);
-            alarm a = new alarm(array[i]);
+            
             if(list.size() > 0){
                 FighterENV last = list.get(list.size() - 1);
-                
+                alarm a = new alarm(array[i]);
+                a.setType("CO");
+                a.setDate(last.getDate());
+                a.setState("false");
                 if (Integer.parseInt(last.getCo()) >= 25){
-                    a.setCo("true");
-                    sendBD = true;
-                    //a.setDate(last.getDate());
+ 
+                    a.setState("true");
+                   
                 }
+                actual.add(mapper.writeValueAsString(a));
+                
+               
             }
             if(list2.size() > 0){
                 FighterHR last2 = list2.get(list2.size() - 1);
+                alarm a = new alarm(array[i]);
+                a.setType("CO");
+                a.setDate(last2.getDate());
+                a.setState("false");
                 if (Double.parseDouble(last2.getHr()) >= 100.0){
-                    a.setHr("true");
-                    sendBD = true;
-                    //a.setDate(last2.getDate());
+                   a.setState("true");
                 }
-     
-            }
-            if(sendBD){
-                repositoryalarms.save(a);
-            }
-            actual.add(mapper.writeValueAsString(a));   
+                actual.add(mapper.writeValueAsString(a));
+            }           
         }
        
         Object[] array = actual.toArray();
@@ -178,6 +206,8 @@ public class ApiController {
         
         return strr;
     }
+    
+    /*
     @CrossOrigin(origins = "http://192.168.160.103:11300")
     @GetMapping("/alarms/all")
     public String alarmsAll() throws JsonProcessingException {
@@ -192,6 +222,7 @@ public class ApiController {
         String strr = Arrays.toString(alarm);
         return strr;
     }
+    */
     @CrossOrigin(origins = "http://192.168.160.103:11300")
     @GetMapping("/fighters/all")
     public String fightersINFO() throws JsonProcessingException {
@@ -279,11 +310,33 @@ public class ApiController {
         for (int i = 0; i < array.length;i++) {
             
             List<FighterENV> env = repositoryenv.findByName(array[i]);
+            FighterENV[] arrayEnv = new FighterENV[env.size()];
+            arrayEnv = env.toArray(arrayEnv);
+            List<FighterENV> tmpE = new ArrayList<>();
+            int tmp = 0;
+            for(int j = 0; j < env.size()-1;j++){
+                int date = Integer.parseInt(arrayEnv[j].getDate());
+                if(date >= tmp){
+                    tmp = date + 300;
+                    tmpE.add(arrayEnv[j]);
+                }
+            }
             List<FighterHR> hr = repositoryhr.findByName(array[i]);
+            FighterHR[] arrayHr = new FighterHR[hr.size()];
+            arrayHr = hr.toArray(arrayHr);
+            List<FighterHR> tmpH = new ArrayList<>();
+            tmp = 0;
+            for(int j = 0; j < hr.size()-1;j++){
+                int date = Integer.parseInt(arrayHr[j].getDate());
+                if(date >= tmp){
+                    tmp = date + 300;
+                    tmpH.add(arrayHr[j]);
+                }
+            }
             HashMap<String, Object> board = new HashMap<String, Object>();
             
-            board.put("env", env);
-            board.put("hr", hr);
+            board.put("env", tmpE);
+            board.put("hr", tmpH);
             board.put("id", array[i]);
             actual.add(mapper.writeValueAsString(board));
         }
