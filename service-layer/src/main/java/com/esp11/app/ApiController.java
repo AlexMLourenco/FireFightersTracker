@@ -195,7 +195,7 @@ public class ApiController {
             if(list2.size() > 0){
                 FighterHR last2 = list2.get(list2.size() - 1);
                 alarm a = new alarm(array[i]);
-                a.setType("CO");
+                a.setType("HR");
                 a.setDate(last2.getDate());
                 a.setState("false");
                 a.setValue(last2.getHr());

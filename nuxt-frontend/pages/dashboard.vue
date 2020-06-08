@@ -15,95 +15,10 @@
           @input="changeFirefighter"
 
       ></v-select>
-      firefighter - {{firefighter}}
+      <!-- firefighter - {{firefighter}} -->
     </v-row>
 
     <v-layout wrap>
-
-      <v-flex
-        md12
-        sm12
-        lg4
-      >
-        <material-chart-card
-          :data="graph_co.data"
-          :options="graph_co.options"
-          color="info"
-          type="Line"
-        >
-          <h4 class="title font-weight-light">CO Levels</h4>
-          <p class="category d-inline-flex font-weight-light">
-            <v-icon
-              color="green"
-              small
-            >
-              mdi-arrow-up
-            </v-icon>
-            <span class="green--text">10%</span>&nbsp;
-            increase in active fires
-          </p>
-
-          <template slot="actions">
-            <v-icon
-              class="mr-2"
-              small
-            >
-              mdi-clock-outline
-            </v-icon>
-            <span class="caption grey--text font-weight-light">updated 4 minutes ago</span>
-          </template>
-        </material-chart-card>
-      </v-flex>
-      <v-flex
-        md12
-        sm12
-        lg4
-      >
-        <material-chart-card
-          :data="graph_hr.data"
-          :options="graph_hr.options"
-          color="red"
-          type="Line"
-        >
-          <h4 class="title font-weight-light">Heart Rate BPM</h4>
-          <p class="category d-inline-flex font-weight-light">Number of active firefighters</p>
-
-          <template slot="actions">
-            <v-icon
-              class="mr-2"
-              small
-            >
-              mdi-clock-outline
-            </v-icon>
-            <span class="caption grey--text font-weight-light">updated 10 minutes ago</span>
-          </template>
-        </material-chart-card>
-      </v-flex>
-      <v-flex
-        md12
-        sm12
-        lg4
-      >
-        <material-chart-card
-          :data="graph_temperature.data"
-          :options="graph_temperature.options"
-          color="green"
-          type="Line"
-        >
-          <h3 class="title font-weight-light">Temperature</h3>
-          <p class="category d-inline-flex font-weight-light">Graph of temperature by time</p>
-
-          <template slot="actions">
-            <v-icon
-              class="mr-2"
-              small
-            >
-              mdi-clock-outline
-            </v-icon>
-            <span class="caption grey--text font-weight-light">campaign sent 26 minutes ago</span>
-          </template>
-        </material-chart-card>
-      </v-flex>
       <v-flex
         sm6
         xs12
@@ -111,12 +26,12 @@
         lg3
       >
         <material-stats-card
-          color="green"
+          color="info"
           icon="mdi-chemical-weapon"
           title="CO"
           :value="firefighter.env.co"
           sub-icon="mdi-update"
-          sub-text="5 seconds ago"
+          sub-text="15 seconds ago"
         />
       </v-flex>
       <v-flex
@@ -125,18 +40,14 @@
         md6
         lg3
       >
-                <!-- :value="firefighter.env.temp" -->
-
         <material-stats-card
-          color="orange"
+          color="green"
           icon="mdi-temperature-celsius"
           title="Temperature"
           small-value="C"
           :value="firefighter.env.temp"
           sub-icon="mdi-update"
-          sub-icon-color="error"
-          sub-text="5 seconds ago"
-          sub-text-color="text-primary"
+          sub-text="15 seconds ago"
         />
         
       </v-flex>
@@ -153,7 +64,7 @@
           :value="firefighter.hr.hr"
           small-value="bpm"
           sub-icon="mdi-update"
-          sub-text="5 seconds ago"
+          sub-text="15 seconds ago"
         />
       </v-flex>
       <v-flex
@@ -163,76 +74,84 @@
         lg3
       >
         <material-stats-card
-          color="info"
+          color="blue"
           icon="mdi-water-percent"
           title="Humidity"
           :value="firefighter.env.hum"
           small-value="%"
           sub-icon="mdi-update"
-          sub-text="5 seconds ago"
+          sub-text="15 seconds ago"
         />
       </v-flex>
-      <!-- <v-flex
-        sm6
-        xs12
-        md6
-        lg3
-      >
-        <material-stats-card
-          color="info"
-          icon="mdi-twitter"
-          title="Followers"
-          value="+245"
-          sub-icon="mdi-update"
-          sub-text="Just Updated"
-        />
-      </v-flex>
-            <v-flex
-        sm6
-        xs12
-        md6
-        lg3
-      >
-        <material-stats-card
-          color="info"
-          icon="mdi-twitter"
-          title="Followers"
-          value="+245"
-          sub-icon="mdi-update"
-          sub-text="Just Updated"
-        />
-      </v-flex>
-            <v-flex
-        sm6
-        xs12
-        md6
-        lg3
-      >
-        <material-stats-card
-          color="info"
-          icon="mdi-twitter"
-          title="Followers"
-          value="+245"
-          sub-icon="mdi-update"
-          sub-text="Just Updated"
-        />
-      </v-flex>
-            <v-flex
-        sm6
-        xs12
-        md6
-        lg3
-      >
-        <material-stats-card
-          color="info"
-          icon="mdi-twitter"
-          title="Followers"
-          value="+245"
-          sub-icon="mdi-update"
-          sub-text="Just Updated"
-        />
-      </v-flex> -->
+
     </v-layout>
+      <v-row>
+        <material-chart-card
+          :data="graph_co.data"
+          :options="graph_co.options"
+          color="info"
+          type="Line"
+        >
+          <h4 class="title font-weight-light">{{firefighter.id}} CO Levels</h4>
+          <p class="category d-inline-flex font-weight-light">
+            Graph of temperature by time
+
+          </p>
+
+          <template slot="actions">
+            <v-icon
+              class="mr-2"
+              small
+            >
+              mdi-clock-outline
+            </v-icon>
+            <span class="caption grey--text font-weight-light">updated 1 minute ago</span>
+          </template>
+        </material-chart-card>
+      </v-row>
+      <v-row>
+        <material-chart-card
+          :data="graph_hr.data"
+          :options="graph_hr.options"
+          color="red"
+          type="Line"
+        >
+          <h4 class="title font-weight-light">{{firefighter.id}} Heart Rate BPM</h4>
+          <p class="category d-inline-flex font-weight-light">Graph of Heart Rate BPM of firefighter</p>
+
+          <template slot="actions">
+            <v-icon
+              class="mr-2"
+              small
+            >
+              mdi-clock-outline
+            </v-icon>
+            <span class="caption grey--text font-weight-light">updated 1 minute ago</span>
+          </template>
+        </material-chart-card>
+      </v-row>
+
+    <v-row>
+        <material-chart-card
+          :data="graph_temperature.data"
+          :options="graph_temperature.options"
+          color="green"
+          type="Line"
+        >
+          <h3 class="title font-weight-light">{{firefighter.id}} Temperature</h3>
+          <p class="category d-inline-flex font-weight-light">Graph of temperature by time</p>
+
+          <template slot="actions">
+            <v-icon
+              class="mr-2"
+              small
+            >
+              mdi-clock-outline
+            </v-icon>
+            <span class="caption grey--text font-weight-light">updated 1 minute ago</span>
+          </template>
+        </material-chart-card>
+      </v-row>
   </v-container>
 </template>
 
@@ -252,43 +171,6 @@
     },
     data() {
       return {
-        dailySalesChart: {
-          data: {
-            labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
-            series: [
-              [12, 17, 7, 17, 23, 18, 38]
-            ]
-          },
-          options: {
-            low: 0,
-            high: 50, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
-            chartPadding: {
-              top: 0,
-              right: 0,
-              bottom: 0,
-              left: 0
-            }
-          }
-        },
-        dataCompletedTasksChart: {
-          data: {
-            labels: ['12am', '3pm', '6pm', '9pm', '12pm', '3am', '6am', '9am'],
-            series: [
-              [23, 75, 45, 30, 28, 24, 20, 19]
-            ]
-          },
-          options: {
-            low: 10,
-            high: 40, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
-            chartPadding: {
-              top: 0,
-              right: 0,
-              bottom: 0,
-              left: 0
-            }
-          }
-        },
-
         graph_temperature: {
           data: {
             labels: [],
@@ -299,7 +181,7 @@
           options: {
             
           low: 20,
-          high: 40, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+          high: 45, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
           chartPadding: {
             top: 0,
             right: 0,
@@ -320,7 +202,7 @@
           options: {
             
           low: 0,
-          high: 120, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+          high: 300, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
           chartPadding: {
             top: 0,
             right: 0,
@@ -340,7 +222,7 @@
           options: {
             
           low: 40,
-          high: 150, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+          high: 200, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
           chartPadding: {
             top: 0,
             right: 0,
@@ -350,96 +232,6 @@
           // maintainAspectRatio: true,
           }
         },
-        emailsSubscriptionChart: {
-          data: {
-            labels: ['Ja', 'Fe', 'Ma', 'Ap', 'Mai', 'Ju', 'Jul', 'Au', 'Se', 'Oc', 'No', 'De'],
-            series: [
-              [542, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895]
-            ]
-          },
-          options: {
-            axisX: {
-              showGrid: false
-            },
-            low: 0,
-            high: 1000,
-            chartPadding: {
-              top: 0,
-              right: 5,
-              bottom: 0,
-              left: 0
-            }
-          },
-          responsiveOptions: [
-            ['screen and (max-width: 640px)', {
-              seriesBarDistance: 5,
-              axisX: {
-                labelInterpolationFnc: function (value) {
-                  return value[0]
-                }
-              }
-            }]
-          ]
-        },
-        headers: [
-          {
-            sortable: false,
-            text: 'ID',
-            value: 'id'
-          },
-          {
-            sortable: false,
-            text: 'Name',
-            value: 'name'
-          },
-          {
-            sortable: false,
-            text: 'Salary',
-            value: 'salary',
-            align: 'right'
-          },
-          {
-            sortable: false,
-            text: 'Country',
-            value: 'country',
-            align: 'right'
-          },
-          {
-            sortable: false,
-            text: 'City',
-            value: 'city',
-            align: 'right'
-          }
-        ],
-        items: [
-          {
-            name: 'Dakota Rice',
-            country: 'Niger',
-            city: 'Oud-Tunrhout',
-            salary: '$35,738'
-          },
-          {
-            name: 'Minerva Hooper',
-            country: 'Curaçao',
-            city: 'Sinaai-Waas',
-            salary: '$23,738'
-          }, {
-            name: 'Sage Rodriguez',
-            country: 'Netherlands',
-            city: 'Overland Park',
-            salary: '$56,142'
-          }, {
-            name: 'Philip Chanley',
-            country: 'Korea, South',
-            city: 'Gloucester',
-            salary: '$38,735'
-          }, {
-            name: 'Doris Greene',
-            country: 'Malawi',
-            city: 'Feldkirchen in Kārnten',
-            salary: '$63,542'
-          }
-        ],
         tabs: 0,
         list: {
           0: false,
@@ -481,41 +273,44 @@
           }     
 
           this.env = this.firefighter_graphs.env
-          this.hr = this.firefighter_graphs.hr
+          this.heartrate = this.firefighter_graphs.hr
           // console.log(this.env)
           // this.env.forEach( env_value => env_value.env = {'temp': env_value.temp, 'timestamp': env_value.date})
           //Popular os graficos
+          var temp_series = []
+          var temp_labels = []
+          var co_series = []
+          var co_labels = []
+          var hr_series = []
+          var hr_labels = []
+
           for (var e in this.env){
-            // console.log(this.graph_temperature[e])
-            if (this.graph_temperature[this.graph_temperature.length - 1] != this.env[e].temp &&
-                this.graph_co[this.graph_co.length - 1] != this.env[e].co){
-                var date = new Date(this.env[e].date * 1000)
-                var string = date.getHours() + ':' + date.getMinutes()
-                if (date.getMinutes() % 15 === 0){
-                  this.graph_temperature.data.series[0].push(this.env[e].temp)
-                  this.graph_temperature.data.labels.push(string)
-                  this.graph_co.data.series[0].push(this.env[e].co)
-                  this.graph_co.data.labels.push(string)
-                }
-            }
+            var date = new Date(this.env[e].date * 1000)
+            var string = date.getHours() + ':' + date.getMinutes()
+            temp_series.push(this.env[e].temp)
+            temp_labels.push(string)
+            co_series.push(this.env[e].co)
+            co_labels.push(string)
           }
 
           for (var hr in this.heartrate){
-            if (this.graph_hr[this.graph_hr.length - 1] != this.heartrate[hr].hr){
-                console.log(this.heartrate[hr])
-                var date = new Date(this.heartrate[hr].date * 1000)
-                var string = date.getHours() + ':' + date.getMinutes()    
-                if (date.getMinutes() % 15 === 0){
-                  this.graph_hr.data.series[0].push(this.heartrate[hr].hr)
-                  this.graph_hr.data.labels.push(string)
-                }
-            }
-
+            var date = new Date(this.heartrate[hr].date * 1000)
+            var string = date.getHours() + ':' + date.getMinutes()
+            hr_series.push(this.heartrate[hr].hr)
+            hr_labels.push(string)
+      
           }
 
+          this.graph_temperature.data.series[0] = temp_series
+          this.graph_temperature.data.labels = temp_labels 
+          this.graph_co.data.series[0] = co_series
+          this.graph_co.data.labels = co_labels
+          
+          this.graph_hr.data.series[0] = hr_series
+          this.graph_hr.data.labels = hr_labels
 
-          console.log(this.graph_temperature)
-          console.log(this.graph_hr)
+          console.log('heart rate graph ondashboardLoad',this.graph_hr)
+          // console.log(this.graph_hr)
           
       
         
@@ -550,7 +345,6 @@
 
           //Separa os bombeiros 
           this.firefighters.forEach( firefighter => firefighter.gps.coordinates = [firefighter.gps.gps_tag_long,firefighter.gps.gps_tag_lat])
-          // console.log(this.firefighters)
           for (var f in this.firefighters){
             if (this.firefighters[f].id === this.selectedFirefighter){
               this.firefighter = this.firefighters[f]
@@ -559,52 +353,39 @@
           }
 
           //this.dataCompletedTasksChart.series = 
-          
-          // console.log(this.info)
-          
-          this.env = this.firefighter_graphs.env
-          // console.log(this.env)
-          // this.env.forEach( env_value => env_value.env = {'temp': env_value.temp, 'timestamp': env_value.date})
+                    
+          var temp_series = []
+          var temp_labels = []
+          var co_series = []
+          var co_labels = []
+          var hr_series = []
+          var hr_labels = []
 
-          
-          //Popular os graficos
           for (var e in this.env){
-            if (this.graph_temperature[this.graph_temperature.length - 1] != this.env[e].temp &&
-                this.graph_co[this.graph_co.length - 1] != this.env[e].co){
-              //  if (this.graph_temperature.data.series[0].length < 30){
-                
-                var date = new Date(this.env[e].date * 1000)
-                var string = date.getHours() + ':' + date.getMinutes()
-                if (date.getMinutes() % 15 === 0){
-                  this.graph_temperature.data.series[0].push(this.env[e].temp)
-                  this.graph_temperature.data.labels.push(string)
-                  this.graph_co.data.series[0].push(this.env[e].co)
-                  this.graph_co.data.labels.push(string)
-                }
-              // }
-            }
-            // if (this.graph_co_series[this.graph_co_series.length - 1] != this.env[e].co){
-            //   this.graph_co_series.push(this.env[e].temp)
-            //   this.graph_co_series.push(this.env[e].date)
-            // }
+            var date = new Date(this.env[e].date * 1000)
+            var string = date.getHours() + ':' + date.getMinutes()
+            temp_series.push(this.env[e].temp)
+            temp_labels.push(string)
+            co_series.push(this.env[e].co)
+            co_labels.push(string)
           }
 
           for (var hr in this.heartrate){
-            if (this.graph_hr[this.graph_hr.length - 1] != this.heartrate[hr].hr){
-                var date = new Date(this.heartrate[hr].date * 1000)
-                var string = date.getHours() + ':' + date.getMinutes()    
-                if (date.getMinutes() % 15 === 0){
-                  this.graph_hr.data.series[0].push(this.heartrate[hr].hr)
-                  this.graph_hr.data.labels.push(string)
-                }
-            }
+            var date = new Date(this.heartrate[hr].date * 1000)
+            var string = date.getHours() + ':' + date.getMinutes()
+            hr_series.push(this.heartrate[hr].hr)
+            hr_labels.push(string)
+      
           }
 
-          // this.dataCompletedTasksChart.series = this.graph_temperature_series
-          // this.dataCompletedTasksChart.labels = this.graph_temperature_timestamp
-          // console.log('data_completed_tasksseries',this.dataCompletedTasksChart.series)
-          
-          // console.log('after',this.env)
+          this.graph_temperature.data.series[0] = temp_series
+          this.graph_temperature.data.labels = temp_labels 
+          this.graph_co.data.series[0] = co_series
+          this.graph_co.data.labels = co_labels
+          this.graph_hr.data.series[0] = hr_series
+          this.graph_hr.data.labels = hr_labels
+
+          console.log('this.graph_hr fetchAllInfo',this.graph_hr)
 
         }catch(error){
           console.log(error)
@@ -620,55 +401,43 @@
             }
           }
 
-          //this.dataCompletedTasksChart.series = 
-          
-          // console.log(this.info)
-          
           this.env = this.firefighter_graphs.env
-          // console.log(this.env)
-          // this.env.forEach( env_value => env_value.env = {'temp': env_value.temp, 'timestamp': env_value.date})
+          this.heartrate = this.firefighter_graphs.hr
 
-          this.new_data = []
-          //Popular os graficos
-          this.graph_temperature.data.series[0] = []
-          this.graph_temperature.data.labels = []
-          this.graph_co.data.series[0] = []
-          this.graph_co.data.labels = []
-          
+
+          var temp_series = []
+          var temp_labels = []
+          var co_series = []
+          var co_labels = []
+          var hr_series = []
+          var hr_labels = []
+
           for (var e in this.env){
-            if (this.graph_temperature[this.graph_temperature.length - 1] != this.env[e].temp &&
-                this.graph_co[this.graph_co.length - 1] != this.env[e].co){
-              //  if (this.graph_temperature.data.series[0].length < 30){
-                  // console.log(this.env[e].date)
-                var date = new Date(this.env[e].date * 1000)
-                var string = date.getHours() + ':' + date.getMinutes()
-                // console.log(date.getMinutes())
-                if (date.getMinutes() % 15 === 0){
-                  this.graph_temperature.data.series[0].push(this.env[e].temp)
-                  this.graph_temperature.data.labels.push(string)
-                  this.graph_co.data.series[0].push(this.env[e].co)
-                  this.graph_co.data.labels.push(string)
-                  console.log(string)
-                }
-              // }
-            }
-            // if (this.graph_co_series[this.graph_co_series.length - 1] != this.env[e].co){
-            //   this.graph_co_series.push(this.env[e].temp)
-            //   this.graph_co_series.push(this.env[e].date)
-            // }
+            var date = new Date(this.env[e].date * 1000)
+            var string = date.getHours() + ':' + date.getMinutes()
+            temp_series.push(this.env[e].temp)
+            temp_labels.push(string)
+            co_series.push(this.env[e].co)
+            co_labels.push(string)
           }
-          for (var hr in this.heartrate){
-            if (this.graph_hr[this.graph_hr.length - 1] != this.heartrate[hr].temp){
-                var date = new Date(this.env[e].date * 1000)
-                var string = date.getHours() + ':' + date.getMinutes()    
-                if (date.getMinutes() % 15 === 0){
-                  this.graph_hr.data.series[0].push(this.heartrate[hr].hr)
-                  this.graph_hr.data.labels.push(string)
-                }
-            }
-            
 
+          for (var hr in this.heartrate){
+            var date = new Date(this.heartrate[hr].date * 1000)
+            var string = date.getHours() + ':' + date.getMinutes()
+            hr_series.push(this.heartrate[hr].hr)
+            hr_labels.push(string)
+      
           }
+
+          this.graph_temperature.data.series[0] = temp_series
+          this.graph_temperature.data.labels = temp_labels 
+          this.graph_co.data.series[0] = co_series
+          this.graph_co.data.labels = co_labels
+          this.graph_hr.data.series[0] = hr_series
+          this.graph_hr.data.labels = hr_labels
+
+          console.log('this.graph_hr changeFirefighter',this.graph_hr)
+          // }
 
           // this.dataCompletedTasksChart.series = this.graph_temperature_series
 

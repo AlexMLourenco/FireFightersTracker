@@ -75,21 +75,23 @@
                 md6
                 sm12>
                 <h2 class="title font-weight-light">Firefighter VR12</h2>
-
-                <material-notification
-                  class="mb-3"
-                  color="warning"
-                >
-                  <strong>CO Levels too High - VALUE</strong> 
-                </material-notification>
-
-                <material-notification
-                  class="mb-3"
-                  color="error"
-                >
-                  <strong>Heart Rate level too high - VALUE </strong>
-                </material-notification>
-
+                
+                <div v-if="notification[5].state === 'true'">
+                  <material-notification
+                    class="mb-3"
+                    :color="notifications[5].color"
+                  >
+                    <strong>CO Levels too High - VALUE</strong> 
+                  </material-notification>
+                </div>
+                <div v-else>
+                  <material-notification
+                    class="mb-3"
+                    :color="notifications[5].color"
+                  >
+                    <strong>Heart Rate level too high - VALUE </strong>
+                  </material-notification>
+                </div>
               </v-flex>
             </v-layout>
           </v-card-text>
@@ -144,16 +146,19 @@
       },
       async fetchAlarms(){
         try{
-          const res = await axios.get(this.getUrl() + '/alarms/all')
+          const res = await axios.get(this.getUrl() + '/alarms/last')
           this.notifications = res.data
+          console.log(this.notifications)
           this.alarms_co = []
           this.alarms_hr = []
-          console.log(this.notifications)
-          // for (var n in this.notifications){
-          //   if (this.notifications[n].id  ){
 
-          //   }
-          // }
+          for (var n in this.notifications){
+            if (this.notifications.state === "false"){
+              this.notifications[n].color == "success"
+            }else{
+              this.notifications[n].color == "error"
+            }
+          }
           // console.log(this.notifications)
         }catch(error){
           console.log(error)
