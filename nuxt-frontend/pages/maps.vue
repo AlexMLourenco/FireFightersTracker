@@ -8,7 +8,7 @@
         @load="onMapLoad">
 
             <MglMarker v-for="(firefighter, index) in firefighters" :key="index" :coordinates.sync="firefighter.gps.coordinates">
-              <v-icon slot="marker" color="red">mdi-fire-truck</v-icon>
+              <v-icon slot="marker" size="25" color="red">mdi-fire-truck</v-icon>
                 <MglPopup>
                   <VCard>
                   <p class="category d-inline-flex font-weight-light">

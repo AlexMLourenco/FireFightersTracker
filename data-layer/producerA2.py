@@ -77,7 +77,7 @@ for item in new:
         producer.send('esp11_env', item)
     elif item['type'] == 'hr':
         producer.send('esp11_hr', item)
-    time.sleep(0.04)
+    time.sleep(0.08)
 
 # # produce asynchronously
 # for _ in range(100):

@@ -9,23 +9,90 @@
     >
       <v-flex xs12>
         <material-card
-          color="green">
+          color="#424242">
           <div
             slot="header"
           >
-            <div class="title font-weight-light mb-2">Notifications</div>
+            <div class="title font-weight-light mb-2">
+              Alarms             
+               <v-icon
+                size="20"
+              >
+                mdi-alarm-light
+              </v-icon></div>
             <div class="category">
-              List of notifications
+
             </div>
           </div>
-            <material-notification v-for="(notification,index) in notifications" :key="index"
+
+          <v-card-text>
+            <v-layout
+              row
+              wrap>
+              <v-flex
+                md6
+                sm12>
+                <h2 class="title font-weight-light mb-3">Firefighter A1</h2>
+                <material-notification
                   class="mb-3"
                   color="warning"
-                  dismissible
                 >
-                  <strong>WARNING</strong> {{notification.fighter}} - {{notification.co}} - {{notification.hr}}
-            </material-notification>
-          
+                  <strong>CO Levels too High - VALUE</strong> 
+                </material-notification>
+
+                <material-notification
+                  class="mb-3"
+                  color="error"
+                >
+                  <strong>Heart Rate level too high - VALUE </strong>
+                </material-notification>
+
+
+              </v-flex>
+
+              <v-flex
+                md6
+                sm12>
+                <h2 class="title font-weight-light">Firefighter A2</h2>
+
+                <material-notification
+                  class="mb-3"
+                  color="success"
+                >
+                  <strong>CO Levels normal - VALUE</strong> 
+                </material-notification>
+
+                <material-notification
+                  class="mb-3"
+                  color="success"
+                >
+                  <strong>Heart Rate normal - VALUE </strong>
+                </material-notification>
+
+
+              </v-flex>
+                            <v-flex
+                md6
+                sm12>
+                <h2 class="title font-weight-light">Firefighter VR12</h2>
+
+                <material-notification
+                  class="mb-3"
+                  color="warning"
+                >
+                  <strong>CO Levels too High - VALUE</strong> 
+                </material-notification>
+
+                <material-notification
+                  class="mb-3"
+                  color="error"
+                >
+                  <strong>Heart Rate level too high - VALUE </strong>
+                </material-notification>
+
+              </v-flex>
+            </v-layout>
+          </v-card-text>
         </material-card>
       </v-flex>
     </v-layout>
@@ -79,7 +146,14 @@
         try{
           const res = await axios.get(this.getUrl() + '/alarms/all')
           this.notifications = res.data
+          this.alarms_co = []
+          this.alarms_hr = []
           console.log(this.notifications)
+          // for (var n in this.notifications){
+          //   if (this.notifications[n].id  ){
+
+          //   }
+          // }
           // console.log(this.notifications)
         }catch(error){
           console.log(error)
@@ -91,7 +165,7 @@
     },
     created(){
       this.fetchAlarms();
-      this.timer = setInterval(this.fetchAlarms, 3000)
+      this.timer = setInterval(this.fetchAlarms, 5000)
     }
   }
 </script>
