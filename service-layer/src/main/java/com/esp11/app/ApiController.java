@@ -365,7 +365,7 @@ public class ApiController {
         return mapper.writeValueAsString(board);
 */
     }
-    
+ /*   
     @KafkaListener(topics = "gps", groupId = "team")
     public void listenGPS(String message) throws JsonProcessingException {
         
@@ -400,4 +400,5 @@ public class ApiController {
         
         repositoryenv.save(t);   
     }
+*/
 }
