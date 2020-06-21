@@ -109,11 +109,11 @@ producer = KafkaProducer(bootstrap_servers=['localhost:9092'],value_serializer=l
 #    time.sleep(0.04)
 for item in new:
     if item['type'] == 'gps':
-        producer.send('gps', item)
+        producer.send('esp11_gps', item)
     elif item['type'] == 'env':
-        producer.send('env', item)
+        producer.send('esp11_env', item)
     elif item['type'] == 'hr':
-        producer.send('hr', item)
+        producer.send('esp11_hr', item)
     pprint.pprint(item)
     time.sleep(0.04)
 
