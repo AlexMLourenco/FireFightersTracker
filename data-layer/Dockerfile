@@ -1,10 +1,20 @@
-FROM python:3-alpine
+FROM ubuntu:18.04
 
-WORKDIR /usr/src/app
+RUN apt update
+RUN apt-get install -y python3.6 python3-pip python3-dev build-essential gcc \
+    libsnmp-dev snmp-mibs-downloader
 
-RUN pip3 install --no-cache-dir kafka-python
-RUN pip3 install --no-cache-dir pprint 
+RUN pip3 install --upgrade pip
 
-COPY . .
+RUN mkdir /app
+WORKDIR /app
+COPY . /app
 
-CMD [ "python3", "producer.py" ]
+RUN pip3 install kafka-python
+RUN pip3 install pprint 
+RUN pip3 --version
+
+COPY start.sh /app
+RUN ["chmod", "+x", "start.sh"]
+WORKDIR /app
+ENTRYPOINT ["sh","start.sh"]

@@ -8,9 +8,13 @@
         @load="onMapLoad">
 
             <MglMarker v-for="(firefighter, index) in firefighters" :key="index" :coordinates.sync="firefighter.gps.coordinates">
-              <v-icon slot="marker" color="red">mdi-fire-truck</v-icon>
+              <v-icon slot="marker" size="25" color="red">mdi-fire-truck</v-icon>
                 <MglPopup>
                   <VCard>
+                  <p class="category d-inline-flex font-weight-light">
+                  Firefighter {{firefighter.id}}
+                  </p>
+                  <p></p>
                   <p class="category d-inline-flex font-weight-light">
                   GPS Location
                   </p>
@@ -155,14 +159,15 @@
           this.firefighters = res.data
           this.firefighters.forEach( firefighter => firefighter.gps.coordinates = [firefighter.gps.gps_tag_long,firefighter.gps.gps_tag_lat])
           // console.log('depois', this.firefighters)
+          console.log(this.firefighters)
         }catch(error){
           console.log(error)
         }   
       },
 
-
+      //Url service layer
       getUrl(){
-        return "http://192.168.160.103:11080"
+        return "http://localhost:8080"
       }
     },
     computed: {

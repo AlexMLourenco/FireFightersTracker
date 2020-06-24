@@ -63,13 +63,16 @@ public class ApiController {
 
     //private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
     public String str = "";
+    public final String origin_production = "http://192.168.160.103:11300";
+    public final String origin_dev = "http://localhost:3000";
+
     String[] array = {"a1","a2","vr12"};
     @GetMapping("/version")
     public String version() throws JsonProcessingException {
         return "1.0";
     }
     
-    @CrossOrigin(origins = "http://192.168.160.103:11300")
+    @CrossOrigin(origins = origin_dev)
     @GetMapping("/fighters/gps")
     public String fightersLocation() throws JsonProcessingException {
         /*
@@ -112,7 +115,7 @@ public class ApiController {
         
         return strr;
     }
-    @CrossOrigin(origins = "http://192.168.160.103:11300")
+    @CrossOrigin(origins = origin_dev)
     @GetMapping("/fighters/env")
     public String fightersEnvironment() throws JsonProcessingException {
        
@@ -161,7 +164,7 @@ public class ApiController {
         return strr;
     }
     
-    @CrossOrigin(origins = "http://192.168.160.103:11300")
+    @CrossOrigin(origins = origin_dev)
     @GetMapping("/alarms/last")
     public String alarmsLast() throws JsonProcessingException {
        
@@ -213,9 +216,7 @@ public class ApiController {
         
         return strr;
     }
-    
-    /*
-    @CrossOrigin(origins = "http://192.168.160.103:11300")
+    @CrossOrigin(origins = origin_dev)
     @GetMapping("/alarms/all")
     public String alarmsAll() throws JsonProcessingException {
        
@@ -229,8 +230,7 @@ public class ApiController {
         String strr = Arrays.toString(alarm);
         return strr;
     }
-    */
-    @CrossOrigin(origins = "http://192.168.160.103:11300")
+    @CrossOrigin(origins = origin_dev)
     @GetMapping("/fighters/all")
     public String fightersINFO() throws JsonProcessingException {
        
@@ -309,6 +309,8 @@ public class ApiController {
         return strr;
         
     }
+
+    @CrossOrigin(origins = origin_dev)
     @GetMapping("/dashboard")
     public String dashBoard() throws JsonProcessingException {
   
@@ -379,7 +381,7 @@ public class ApiController {
 
     }
     
-    @KafkaListener(topics = "hr", groupId = "team")
+    @KafkaListener(topics = "esp11_hr", groupId = "team")
     public void listenHR(String message) throws JsonProcessingException {
         
         JSONObject jsonObject = new JSONObject(message);
@@ -390,7 +392,7 @@ public class ApiController {
         repositoryhr.save(t);
     }
  
-    @KafkaListener(topics = "env", groupId = "team")
+    @KafkaListener(topics = "esp11_env", groupId = "team")
     public void listenENV(String message) throws JsonProcessingException {
         
         JSONObject jsonObject = new JSONObject(message);

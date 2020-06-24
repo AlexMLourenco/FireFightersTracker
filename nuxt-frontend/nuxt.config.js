@@ -4,7 +4,7 @@ export default {
   mode: 'universal',
   server: { 
     port: 3000,   
-    host: '0.0.0.0'
+    host: 'localhost'
   }, 
 
   /*
@@ -66,7 +66,7 @@ export default {
 
   proxy: {
     '/api' : {
-      target: 'http://192.168.160.103:11080/',
+      target: 'http://localhost:8080/',
       parthRewrite:{'^/':'/'}, 
     }
   },
