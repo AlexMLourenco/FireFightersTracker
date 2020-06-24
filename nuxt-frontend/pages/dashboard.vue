@@ -44,7 +44,7 @@
           color="green"
           icon="mdi-temperature-celsius"
           title="Temperature"
-          small-value="C"
+          small-value="ºC"
           :value="firefighter.env.temp"
           sub-icon="mdi-update"
           sub-text="15 seconds ago"
@@ -76,9 +76,9 @@
         <material-stats-card
           color="blue"
           icon="mdi-water-percent"
-          title="Humidity"
-          :value="firefighter.env.hum"
-          small-value="%"
+          title="NO2"
+          :value="firefighter.env.no2"
+          small-value="μg/mg³"
           sub-icon="mdi-update"
           sub-text="15 seconds ago"
         />
